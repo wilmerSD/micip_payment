@@ -16,71 +16,64 @@ class HomeViewMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor(context),
-      drawer: const DrawerMenuApp(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: ListView(
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 40.0,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 40.0,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                OptionTypePay(
-                  text: 'Cuotas mensuales',
-                  icon: Bootstrap.calendar2_check,
-                  context: context,
-                  colorBackIcon: const Color.fromRGBO(108, 14, 16, .5),
-                  colorIcon: const Color.fromRGBO(108, 14, 16, 1),
-                  ontap: () => context.go(AppRoutesName.MONTHLYFEES),
-                  whatPlatformIs: 1,
-                ),
-                OptionTypePay(
-                  text: 'Certificado de habilidad',
-                  icon: Bootstrap.award,
-                  context: context,
-                  colorBackIcon: const Color.fromRGBO(215, 181, 109, .5),
-                  colorIcon: const Color.fromRGBO(215, 181, 109, 1),
-                  ontap: () => context.go(AppRoutesName.CERTIFICATESKILL),
-                  whatPlatformIs: 1,
-                ),
-              ],
+            OptionTypePay(
+              text: 'Cuotas mensuales',
+              icon: Bootstrap.calendar2_check,
+              context: context,
+              colorBackIcon: const Color.fromRGBO(108, 14, 16, .5),
+              colorIcon: const Color.fromRGBO(108, 14, 16, 1),
+              ontap: () => context.go(AppRoutesName.MONTHLYFEES),
+              whatPlatformIs: 1,
             ),
-            SizedBox(height: 30.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 40.0,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                OptionTypePay(
-                  text: 'Constancia de no adeudo',
-                  icon: Bootstrap.file_earmark_text,
-                  context: context,
-                  colorBackIcon: const Color.fromRGBO(42, 42, 41, .5),
-                  colorIcon: const Color.fromRGBO(42, 42, 41, 1),
-                  ontap: () => context.go(AppRoutesName.PROOFNODEBT),
-                  whatPlatformIs: 1,
-                ),
-                OptionTypePay(
-                  text: 'Adelanto de cuotas',
-                  icon: Bootstrap.cash_stack,
-                  context: context,
-                  colorBackIcon: const Color.fromRGBO(227, 30, 36, .5),
-                  colorIcon: const Color.fromRGBO(227, 30, 36, 1),
-                  ontap: () => context.go(AppRoutesName.ADVANCEPAYMENT),
-                  whatPlatformIs: 1,
-                ),
-              ],
+            OptionTypePay(
+              text: 'Certificado de habilidad',
+              icon: Bootstrap.award,
+              context: context,
+              colorBackIcon: const Color.fromRGBO(215, 181, 109, .5),
+              colorIcon: const Color.fromRGBO(215, 181, 109, 1),
+              ontap: () => context.go(AppRoutesName.CERTIFICATESKILL),
+              whatPlatformIs: 1,
             ),
-            SizedBox(height: 40.0),
-            const FooterMobile(),
           ],
         ),
-      ),
+        SizedBox(height: 30.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 40.0,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            OptionTypePay(
+              text: 'Constancia de no adeudo',
+              icon: Bootstrap.file_earmark_text,
+              context: context,
+              colorBackIcon: const Color.fromRGBO(42, 42, 41, .5),
+              colorIcon: const Color.fromRGBO(42, 42, 41, 1),
+              ontap: () => context.go(AppRoutesName.PROOFNODEBT),
+              whatPlatformIs: 1,
+            ),
+            OptionTypePay(
+              text: 'Adelanto de cuotas',
+              icon: Bootstrap.cash_stack,
+              context: context,
+              colorBackIcon: const Color.fromRGBO(227, 30, 36, .5),
+              colorIcon: const Color.fromRGBO(227, 30, 36, 1),
+              ontap: () => context.go(AppRoutesName.ADVANCEPAYMENT),
+              whatPlatformIs: 1,
+            ),
+          ],
+        ),
+        SizedBox(height: 40.0),
+        // const FooterMobile(),
+      ],
     );
   }
 }

@@ -16,8 +16,6 @@ class LayoutView extends StatelessWidget {
         child: Builder(builder: (context) {
           final layoutProvider =
               Provider.of<LayoutProvider>(context, listen: false);
-
-          
           // Se ejecuta solo una vez cuando se construye el widget
           WidgetsBinding.instance.addPostFrameCallback((_) {
             layoutProvider.initialize(context);

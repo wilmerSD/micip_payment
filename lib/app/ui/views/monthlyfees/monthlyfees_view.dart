@@ -1,4 +1,3 @@
-import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/custom_tab_switch.dart';
 import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
@@ -27,6 +26,7 @@ class _MonthlyfeesViewState extends State<MonthlyfeesView> {
         context,
         listen: false,
       );
+      monthlyfeesProvider.selectTab(0);
       monthlyfeesProvider.fetchPendingPay(context);
     });
   }
@@ -37,26 +37,19 @@ class _MonthlyfeesViewState extends State<MonthlyfeesView> {
     return UserLayout(
       true,
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        spacing: 10.0,
+        // spacing: 10.0,
         children: [
           _customHedaer(context),
           const SizedBox(),
-          context.read<MonthlyfeesProvider>().isGettingPendingPay
-              ? Center(child: CircularProgressIndicator())
-              // Expanded(child: MonthlyfeesPay())
-              : Expanded(
-                  child: PageView(
-                    controller: context
-                        .read<MonthlyfeesProvider>()
-                        .pageController, 
-                    onPageChanged: (index) =>
-                        context.read<MonthlyfeesProvider>().onPageChanged(
-                          index,
-                        ), // monthlyfeesProvider.onPageChanged,
-                    children: const [MonthlyfeesPay(), MonthlyfeesHistory()],
-                  ),
-                ),
+          Expanded(
+            child: PageView(
+              controller: context.read<MonthlyfeesProvider>().pageController,
+              onPageChanged: (index) => context
+                  .read<MonthlyfeesProvider>()
+                  .onPageChanged(index), // monthlyfeesProvider.onPageChanged,
+              children: const [MonthlyfeesPay(), MonthlyfeesHistory()],
+            ),
+          ),
         ],
       ),
     );
@@ -92,7 +85,9 @@ Widget _options() {
 
 Widget _automaticPay(BuildContext context) {
   return InkWell(
-    onTap: () => context.read<MonthlyfeesProvider>().goToAutomaticPay(context),// monthlyfeesProvider.goToAutomaticPay(context),
+    onTap: () => context.read<MonthlyfeesProvider>().goToAutomaticPay(
+      context,
+    ), // monthlyfeesProvider.goToAutomaticPay(context),
     child: Align(
       alignment: Alignment.centerRight,
       child: Container(

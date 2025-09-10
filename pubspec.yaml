@@ -54,6 +54,8 @@ dependencies:
   dropdown_button2: ^2.3.9
   syncfusion_flutter_charts: ^30.2.7
   url_launcher: ^6.3.2
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 dev_dependencies:
   flutter_test:
@@ -83,7 +85,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -15,7 +15,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-
 class LayoutProvider with ChangeNotifier {
   //INSTANCES
   FocusNode focusNode = FocusNode();
@@ -31,7 +30,7 @@ class LayoutProvider with ChangeNotifier {
   bool isLogOut = false;
   int minutesSesion = 720;
   String roleUser = '0';
-  String nameUser = "Hola que talco";
+  String nameUser = "";
   // String nameRolUser = "";
   ValueNotifier<String> nameRolUser = ValueNotifier("Gerente");
 
@@ -40,6 +39,13 @@ class LayoutProvider with ChangeNotifier {
   Future<void> initialize(BuildContext context) async {
     await load(context);
     await _getinformationUser();
+    final lastRoute = await secureStorage.read(key: "lastRoute");
+    if (lastRoute != null && lastRoute.isNotEmpty) {
+      setActive(lastRoute);
+      print(lastRoute);
+    } else {
+      setActive(AppRoutesName.DASHBOARD); // valor por defecto
+    }
   }
 
   /* 📌 Para obtener el rol del usuario y segun ello ocultar vistas (provisional) */
@@ -57,7 +63,7 @@ class LayoutProvider with ChangeNotifier {
   /* 📌  */
   Future<void> listenRoute() async {
     int count = 0;
-    
+
     //   web.window.onHashChange.listen((event) {
     //   count++;
     //   final route = "/${web.window.location.hash}";
@@ -98,11 +104,14 @@ class LayoutProvider with ChangeNotifier {
   Future<void> load(BuildContext context) async {
     options = [
       //HOME
-      ResponseMenuOptionsModel(        
+      ResponseMenuOptionsModel(
         route: AppRoutesName.DASHBOARD,
         nameOption: "Inicio",
-        iconOption:
-            const Icon(Iconsax.home_outline, color: Colors.white, size: 20),
+        iconOption: const Icon(
+          Iconsax.home_outline,
+          color: Colors.white,
+          size: 20,
+        ),
         isDesplegable: false,
         isActive: true,
         isDesplegated: false,
@@ -113,8 +122,11 @@ class LayoutProvider with ChangeNotifier {
       ResponseMenuOptionsModel(
         route: AppRoutesName.PROFILE,
         nameOption: "Mis datos",
-        iconOption: const Icon(Iconsax.profile_circle_outline,
-            color: Colors.white, size: 20.0),
+        iconOption: const Icon(
+          Iconsax.profile_circle_outline,
+          color: Colors.white,
+          size: 20.0,
+        ),
         isDesplegable: false,
         isActive: false,
         isDesplegated: false,
@@ -123,81 +135,92 @@ class LayoutProvider with ChangeNotifier {
 
       //SEGURIDAD
       ResponseMenuOptionsModel(
-          route: "/seguridad",
-          nameOption: "Seguridad",
-          iconOption: const Icon(Icons.security, color: Colors.white, size: 20),
-          isDesplegable: true,
-          isActive: false,
-          isDesplegated: false,
-          isChild: false,
-          child: [
-            ResponseMenuOptionsModel(
-                isObscure: false,
-                route: AppRoutesName.PERSON,
-                nameOption: "Colegiados",
-                iconOption: const CircleSubItem(),
-                isDesplegable: false,
-                isActive: false,
-                isDesplegated: false,
-                isChild: true),
-          ].where((element) => !element.isObscure!).toList()),
+        route: "/seguridad",
+        nameOption: "Seguridad",
+        iconOption: const Icon(Icons.security, color: Colors.white, size: 20),
+        isDesplegable: true,
+        isActive: false,
+        isDesplegated: false,
+        isChild: false,
+        child: [
+          ResponseMenuOptionsModel(
+            isObscure: false,
+            route: AppRoutesName.PERSON,
+            nameOption: "Colegiados",
+            iconOption: const CircleSubItem(),
+            isDesplegable: false,
+            isActive: false,
+            isDesplegated: false,
+            isChild: true,
+          ),
+        ].where((element) => !element.isObscure!).toList(),
+      ),
 
       //MANTENEDORES
       ResponseMenuOptionsModel(
-          isObscure: false,
-          route: "/mantenedores",
-          nameOption: "Mantenedores",
-          iconOption:
-              const Icon(Iconsax.receipt_square_outline,
-                  color: Colors.white, size: 20),
-          isDesplegable: true,
-          isActive: false,
-          isDesplegated: false,
-          isChild: false,
-          child: [
-            ResponseMenuOptionsModel(
-                isObscure: false,
-                route: AppRoutesName.COURSES,
-                nameOption: "Cursos",
-                iconOption: const CircleSubItem(),
-                isDesplegable: false,
-                isActive: false,
-                isDesplegated: false,
-                isChild: true),
-            ResponseMenuOptionsModel(
-                isObscure: false,
-                route: AppRoutesName.MANAGEQUOTA,
-                nameOption: "Administrar Cuotas",
-                iconOption: const CircleSubItem(),
-                isDesplegable: false,
-                isActive: false,
-                isDesplegated: false,
-                isChild: true),
-          ].where((element) => !element.isObscure!).toList()),
+        isObscure: false,
+        route: "/mantenedores",
+        nameOption: "Mantenedores",
+        iconOption: const Icon(
+          Iconsax.receipt_square_outline,
+          color: Colors.white,
+          size: 20,
+        ),
+        isDesplegable: true,
+        isActive: false,
+        isDesplegated: false,
+        isChild: false,
+        child: [
+          ResponseMenuOptionsModel(
+            isObscure: false,
+            route: AppRoutesName.COURSES,
+            nameOption: "Cursos",
+            iconOption: const CircleSubItem(),
+            isDesplegable: false,
+            isActive: false,
+            isDesplegated: false,
+            isChild: true,
+          ),
+          ResponseMenuOptionsModel(
+            isObscure: false,
+            route: AppRoutesName.MANAGEQUOTA,
+            nameOption: "Administrar Cuotas",
+            iconOption: const CircleSubItem(),
+            isDesplegable: false,
+            isActive: false,
+            isDesplegated: false,
+            isChild: true,
+          ),
+        ].where((element) => !element.isObscure!).toList(),
+      ),
 
       //REPORTES
       ResponseMenuOptionsModel(
-          isObscure: roleUser == '1',
-          route: "/reportes",
-          nameOption: "Reportes",
-          iconOption:
-              const Icon(Iconsax.presention_chart_outline,
-                  color: Colors.white, size: 20),
-          isDesplegable: true,
-          isActive: false,
-          isDesplegated: false,
-          isChild: false,
-          child: [
-            ResponseMenuOptionsModel(
-                isObscure: false,
-                route: AppRoutesName.PAYMENTHISTORY,
-                nameOption: "Historial de pagos",
-                iconOption: const CircleSubItem(),
-                isDesplegable: false,
-                isActive: false,
-                isDesplegated: false,
-                isChild: true),
-          ].where((element) => !element.isObscure!).toList()),
+        isObscure: roleUser == '1',
+        route: "/reportes",
+        nameOption: "Reportes",
+        iconOption: const Icon(
+          Iconsax.presention_chart_outline,
+          color: Colors.white,
+          size: 20,
+        ),
+        isDesplegable: true,
+        isActive: false,
+        isDesplegated: false,
+        isChild: false,
+        child: [
+          ResponseMenuOptionsModel(
+            isObscure: false,
+            route: AppRoutesName.PAYMENTHISTORY,
+            nameOption: "Historial de pagos",
+            iconOption: const CircleSubItem(),
+            isDesplegable: false,
+            isActive: false,
+            isDesplegated: false,
+            isChild: true,
+          ),
+        ].where((element) => !element.isObscure!).toList(),
+      ),
     ].where((element) => !element.isObscure!).toList();
     notifyListeners();
   }
@@ -287,8 +310,9 @@ class LayoutProvider with ChangeNotifier {
 
   /* 📌  */
   void setDesplegated(String route) {
-    ResponseMenuOptionsModel option =
-        options.firstWhere((element) => element.route == route);
+    ResponseMenuOptionsModel option = options.firstWhere(
+      (element) => element.route == route,
+    );
     int index = options.indexWhere((element) => element.route == route);
     option.isDesplegated = !option.isDesplegated!;
     options[index] = option;
@@ -306,40 +330,46 @@ class LayoutProvider with ChangeNotifier {
   }
 
   /* 📌  */
-  void setActive(String route) {
+  void setActive(String route) async {
     options = activeOption(route, options);
     RouteDataTemporary.currentRoute = route;
+    await secureStorage.write(key: "lastRoute", value: route);
     notifyListeners();
-    // if (!Responsive.isDesktop(Get.context!)) {
-    //   Get.back();
-    // }
   }
 
   /* 📌  */
   List<ResponseMenuOptionsModel> activeOption(
-      String route, List<ResponseMenuOptionsModel> list) {
+    String route,
+    List<ResponseMenuOptionsModel> list,
+  ) {
     List<ResponseMenuOptionsModel> myListTemporal = list
-        .map((element) => element.route == route
-            ? createOption(element, true, route)
-            : createOption(element, false, route))
+        .map(
+          (element) => element.route == route
+              ? createOption(element, true, route)
+              : createOption(element, false, route),
+        )
         .toList();
     return myListTemporal;
   }
 
   /* 📌  */
   ResponseMenuOptionsModel createOption(
-      ResponseMenuOptionsModel element, bool state, String route) {
+    ResponseMenuOptionsModel element,
+    bool state,
+    String route,
+  ) {
     return ResponseMenuOptionsModel(
-        route: element.route,
-        nameOption: element.nameOption,
-        iconOption: element.iconOption,
-        isDesplegable: element.isDesplegable,
-        isActive: state,
-        isDesplegated: element.isDesplegated,
-        isChild: element.isChild,
-        child: element.child == null
-            ? null
-            : activeOption(route, element.child ?? []));
+      route: element.route,
+      nameOption: element.nameOption,
+      iconOption: element.iconOption,
+      isDesplegable: element.isDesplegable,
+      isActive: state,
+      isDesplegated: element.isDesplegated,
+      isChild: element.isChild,
+      child: element.child == null
+          ? null
+          : activeOption(route, element.child ?? []),
+    );
   }
 
   /* 📌  */
@@ -430,7 +460,6 @@ class LayoutProvider with ChangeNotifier {
           child: PageNotFound(message: "No se encontró la página solicitada"),
         );
     }
-    
   }
 
   /* 📌 Para los titulos de cada vista */
@@ -460,9 +489,7 @@ class LayoutProvider with ChangeNotifier {
 
 /* 📌 Pequeños circulos de los subItems */
 class CircleSubItem extends StatelessWidget {
-  const CircleSubItem({
-    super.key,
-  });
+  const CircleSubItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -471,8 +498,9 @@ class CircleSubItem extends StatelessWidget {
       height: 8,
       margin: const EdgeInsets.only(left: 15.0),
       decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(50.0))),
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+      ),
     );
   }
 }

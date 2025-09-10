@@ -21,10 +21,7 @@ class PersonalData extends StatelessWidget {
     );
 
     /* 📌 Input de dni */
-    Widget inputDni = DisplayText(
-      helperText: 'DNI',
-      text: person?.dni ?? '',
-    );
+    Widget inputDni = DisplayText(helperText: 'DNI', text: person?.dni ?? '');
 
     /* 📌 Input de dni */
     Widget inputAge = DisplayText(
@@ -40,7 +37,7 @@ class PersonalData extends StatelessWidget {
 
     Widget inputCivilState = DisplayText(
       helperText: 'Estado civil',
-     text: person?.civilStatus ?? ''
+      text: person?.civilStatus ?? '',
     );
 
     Widget inputBirthDate = DisplayText(
@@ -48,47 +45,25 @@ class PersonalData extends StatelessWidget {
       text: authProvider.birthDateFormatted,
     );
 
-    return Scaffold(
-        backgroundColor: AppColors.backgroundColor(context),
-        appBar: AppBar(
-          backgroundColor: AppColors.backgroundColor(context),
-          surfaceTintColor: Colors.transparent,
-          leading: const Leading(),
-          title: const CustomTittleAppbar(tittle: 'Datos personales'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(15),
-          child: ListView(
-            children: [
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputCollege,
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputDni,
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputAge,
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputGender,
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputCivilState,
-              const SizedBox(
-                height: 25.0,
-              ),
-              inputBirthDate,
-              const SizedBox(
-                height: 25.0,
-              ),
-            ],
-          ),
-        ));
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: ListView(
+        children: [
+          const SizedBox(height: 25.0),
+          inputCollege,
+          const SizedBox(height: 25.0),
+          inputDni,
+          const SizedBox(height: 25.0),
+          inputAge,
+          const SizedBox(height: 25.0),
+          inputGender,
+          const SizedBox(height: 25.0),
+          inputCivilState,
+          const SizedBox(height: 25.0),
+          inputBirthDate,
+          const SizedBox(height: 25.0),
+        ],
+      ),
+    );
   }
 }

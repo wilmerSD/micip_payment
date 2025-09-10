@@ -69,16 +69,22 @@ class MyprofileProvider with ChangeNotifier {
     //   notifyListeners();  // Notifica a los widgets que usan este controlador
     // }
   }
-
+  int selectedIndex = 0;
   Future goToPersonalData(BuildContext context) async{
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const PersonalData()));
+    selectedIndex = 0; 
+    notifyListeners();
   }
   Future goToPersonalContact(BuildContext context) async{
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const PersonalContact()));
+    selectedIndex = 1; 
+    notifyListeners();
   }
   Future goToPersonalCollege(BuildContext context) async{
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const PersonalCollege()));
+    selectedIndex = 2; 
+    notifyListeners();
   }
-  
+  Future goToChangePass(BuildContext context) async{
+    selectedIndex = 3; 
+    notifyListeners();
+  }
   
 }

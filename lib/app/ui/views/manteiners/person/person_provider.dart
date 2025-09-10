@@ -68,9 +68,9 @@ class PersonProvider with ChangeNotifier {
         context.pop();
         return;
       }
-      showToastGlobal(context, 1, "error", errorGeneral);
+      showToastGlobal(context, 1, "error", kmessageErrorGeneral);
     } catch (e) {
-      showToastGlobal(context, 1, "error", errorGeneral + e.toString());
+      showToastGlobal(context, 1, "error", kmessageErrorGeneral + e.toString());
     } finally {}
   }
 

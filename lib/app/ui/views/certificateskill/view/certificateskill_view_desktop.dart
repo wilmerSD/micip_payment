@@ -1,3 +1,4 @@
+import 'package:cip_payment_web/app/ui/components/button/btn_primary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
 import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
@@ -17,6 +18,7 @@ class CertificateSkillViewDesktop extends StatelessWidget {
       child: Column(
         spacing: 15.0,
         children: [
+           
           const SizedBox(),
           Row(
             spacing: 30.0,
@@ -91,9 +93,12 @@ Widget inputSpecialtyCertificate(BuildContext context) {
 }
 
 Widget customBtnPay(BuildContext context) {
+  final certificateSkill = Provider.of<CertificateSkillProvider>(context);
   return SizedBox(
     width: 400.0,
-    child: BtnPrimaryInk(
+    child: BtnPrimary(
+      withIconProgress: false,
+      loading: certificateSkill.haveQuotasPending,
       text: 'Pagar S/ 30.0',
       onTap: () {
         ModalUtils.getShowModalBS(

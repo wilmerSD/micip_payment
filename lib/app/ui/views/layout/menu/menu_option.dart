@@ -21,13 +21,16 @@ class MenuOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorTheme = Theme.of(context).colorScheme;
+    // Color colorDrawer = colorTheme.onInverseSurface;
+    Color colorDrawer = AppColors.drawerColor(context);
     final layoutProvider =
         context.watch<LayoutProvider>(); // Obtiene el provider actual
 
     return Column(
       children: [
         Material(
-          color: AppColors.drawerColor(context),
+          color: colorDrawer,
           child: InkWell(
             onTap: item.isChild!
                 ? () {
@@ -36,8 +39,8 @@ class MenuOption extends StatelessWidget {
                 : onTapMenu,
             child: Container(
               color: item.isChild!
-                  ? AppColors.drawerColor(context)
-                  : AppColors.drawerColor(context),
+                  ? colorDrawer
+                  : colorDrawer,
               padding: const EdgeInsets.only(
                   top: 12.0, bottom: 12.0, left: 15.0, right: 0.0),
               child: isCollapsed

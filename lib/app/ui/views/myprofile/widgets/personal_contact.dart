@@ -47,12 +47,6 @@ class PersonalContact extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor(context),
-        appBar: AppBar(
-          backgroundColor: AppColors.backgroundColor(context),
-          surfaceTintColor:Colors.transparent, 
-          leading: const Leading(),
-          title: const CustomTittleAppbar(tittle: 'Contacto'),
-        ),
         body: Padding(
           padding: const EdgeInsets.all(15),
           child: SafeArea(

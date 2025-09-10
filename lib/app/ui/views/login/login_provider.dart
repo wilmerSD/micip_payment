@@ -48,7 +48,9 @@ class LoginProvider with ChangeNotifier {
   bool get isAuthenticating => _isAuthenticating;
 
   Future<void> authentication(BuildContext context) async {
-    if(ctrlUserName.text.isEmpty && ctrlPassword.text.isEmpty){
+    isAuthenticating = true;
+    try{
+      if(ctrlUserName.text.isEmpty && ctrlPassword.text.isEmpty){
       showToastGlobal(
         context,
         2,
@@ -76,7 +78,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
     
-    isAuthenticating = true;
+    
     String? personId = await authService.loginUser(
       ctrlUserName.text.trim().toLowerCase(),
       ctrlPassword.text.trim(),
@@ -107,7 +109,7 @@ class LoginProvider with ChangeNotifier {
     if (kIsWeb) {
       if (person?.isAdmin == true) {
         context.go(AppRoutesName.LAYOUT);
-        web.window.history.replaceState(null, 'Home', '#/home');
+        // web.window.history.replaceState(null, 'Home', '#/home');
       } else {
         context.go(AppRoutesName.HOME);
         web.window.history.replaceState(null, 'Home', '#/home');
@@ -115,5 +117,12 @@ class LoginProvider with ChangeNotifier {
     } else {
       context.go(AppRoutesName.HOME);
     }
+
+    }catch(e){
+
+    }finally{
+      isAuthenticating = false;
+    }
+    
   }
 }

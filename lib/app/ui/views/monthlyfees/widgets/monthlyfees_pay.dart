@@ -1,14 +1,14 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
-import 'package:cip_payment_web/app/ui/components/reciept/select_receipt.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
-import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/checkout_monthlyfees.dart';
+import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/nodebt_view.dart';
 import 'package:cip_payment_web/core/helpers/helpers.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
+import 'package:cip_payment_web/routes/app_routes_name.dart';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class MonthlyfeesPay extends StatelessWidget {
@@ -16,87 +16,111 @@ class MonthlyfeesPay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('hoola');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        spacing: 10.0,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Row(
+      child: context.watch<MonthlyfeesProvider>().isGettingPendingPay
+          ? Center(child: CircularProgressIndicator())
+          : context.read<MonthlyfeesProvider>().listQuotas.isEmpty
+          ? NodebtView()
+          : Column(
+              spacing: 10.0,
               children: [
-                Consumer<MonthlyfeesProvider>(
-                  builder: (context, provider, _) {
-                    return Checkbox(
-                      value: provider.allSelected,
-                      onChanged: (bool? value) {
-                        provider.toggleSelectAll();
-                      },
-                    );
-                  },
-                ),
-                Text('Seleccionar todo', style: AppTextStyle(context).bold13()),
-              ],
-            ),
-          ),
-          Consumer<MonthlyfeesProvider>(
-            builder: (context, provider, _) {
-              return Expanded(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 30.0,
-                    runSpacing: 10.0,
-                    children: List.generate(provider.listQuotas.length, (
-                      index,
-                    ) {
-                      final fee = provider.listQuotas[index];
-                      return _customContainer(
-                        context,
-                        Checkbox(
-                          value: fee.isSelected,
-                          onChanged: (value) {
-                            provider.togglePaid(index, value ?? false);
-                          },
-                        ),
-                        'Cuota ordinaria',
-                        () {
-                          provider.togglePaid(index, !fee.isSelected);
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(
+                    children: [
+                      Consumer<MonthlyfeesProvider>(
+                        builder: (context, provider, _) {
+                          return Checkbox(
+                            value: provider.allSelected,
+                            onChanged: (bool? value) {
+                              provider.toggleSelectAll();
+                            },
+                          );
                         },
-                        '${Helpers.getNameMonth(fee.feeMonth ?? 0)} ${fee.feeYear}',
-                        'S/ ${fee.amount}',
-                      );
-                    }),
+                      ),
+                      Text(
+                        'Seleccionar todo',
+                        style: AppTextStyle(context).bold13(),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
-          SizedBox(
-            width: 400.0,
-            child: Consumer<MonthlyfeesProvider>(
-              builder: (context, provider, _) {
-                
-                return BtnPrimaryInk(
-                  text: 'Pagar S/. ${provider.totalSelected}',
-                  onTap: () {
-                    ModalUtils.getShowModalBS(
-                      context,
-                      content: SelectReceipt(
-                        mainText: 'Pagar S/. ${provider.totalSelected}',
-                        textBtn: 'Continuar',
-                        textPopUp: 'Pagar cuota mensual',
-                        content: SizedBox()// CheckoutMonthlyfees(),
+                Consumer<MonthlyfeesProvider>(
+                  builder: (context, provider, _) {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          spacing: 30.0,
+                          runSpacing: 10.0,
+                          children: List.generate(provider.listQuotas.length, (
+                            index,
+                          ) {
+                            final fee = provider.listQuotas[index];
+                            return _customContainer(
+                              context,
+                              Checkbox(
+                                value: fee.isSelected,
+                                onChanged: (value) {
+                                  provider.togglePaid(index, value ?? false);
+                                },
+                              ),
+                              'Cuota ordinaria',
+                              () {
+                                provider.togglePaid(index, !fee.isSelected);
+                              },
+                              '${Helpers.getNameMonth(fee.feeMonth ?? 0)} ${fee.feeYear}',
+                              'S/ ${fee.amount}',
+                            );
+                          }),
+                        ),
                       ),
-                      title: 'Detalle de pago',
                     );
                   },
-                );
-              },
+                ),
+                SizedBox(
+                  width: 400.0,
+                  child: Consumer<MonthlyfeesProvider>(
+                    builder: (context, provider, _) {
+                      return BtnPrimaryInk(
+                        withIconProgress: false,
+                        loading: provider.totalSelected == 0,
+                        text: 'Pagar S/. ${provider.totalSelected}',
+                        onTap: () {
+                          // provider.pagar(context);
+                          // context.go(
+                          //   AppRoutesName.PAYMENTGOOD,
+                          //   extra: {'amount': 20, 'title': 'Cuotas mensuales'},
+                          // );
+                          context.go(
+                            AppRoutesName.PAYMENTBAD,
+                            extra: {
+                              'operationId': 177796497,
+                              'dateTime':
+                                  '11 de diciembre de 2025 - 14:29 horas ',
+                              'detailError':
+                                  'Las compras por internet de su tarjeta no esta habilitada.',
+                            },
+                          );
+                          // ModalUtils.getShowModalBS(
+                          //   context,
+                          //   content: SelectReceipt(
+                          //     mainText: 'Pagar S/. ${provider.totalSelected}',
+                          //     textBtn: 'Continuar',
+                          //     textPopUp: 'Pagar cuota mensual',
+                          //     content: SizedBox()// CheckoutMonthlyfees(),
+                          //   ),
+                          //   title: 'Detalle de pago',
+                          // );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+              ],
             ),
-          ),
-          const SizedBox(height: 20.0),
-        ],
-      ),
     );
   }
 }

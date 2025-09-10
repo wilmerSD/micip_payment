@@ -8,62 +8,65 @@ class BtnPrimary extends StatelessWidget {
     required this.text,
     this.loading = false,
     this.onTap,
-    this.isGreen = false,
+    this.withIconProgress = true,
     this.margin,
     this.showBoxShadow = true,
   });
   final String text;
   final bool loading;
-  final bool? isGreen;
+  final bool withIconProgress;
   final void Function()? onTap;
   final EdgeInsetsGeometry? margin;
   final bool showBoxShadow;
   @override
   Widget build(BuildContext context) {
+    final colorTheme = Theme.of(context).disabledColor;
     return Container(
-      height: 60.0,
+      height: 55.0,
       margin: margin,
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
+        color: loading ? colorTheme : AppColors.primaryConst,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: showBoxShadow
-            ? [
-                BoxShadow(
-                  color: AppColors.red.withOpacity(0.25),
-                  spreadRadius: 5,
-                  blurRadius: 20,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : [],
+        boxShadow:  [
+          BoxShadow(
+            color: loading
+                ? colorTheme
+                : AppColors.primaryConst.withValues(),
+            spreadRadius: 0.5,
+            blurRadius: 6,
+            offset: const Offset(0, 0),
+          ),
+        ]
+           
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onTap,
+          onTap: loading ? null : onTap,
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  textScaleFactor: 1,
+                  textScaler: TextScaler.linear(1),
                   text,
                   style: AppTextStyle(context)
-                      .bold18(color: AppColors.backgroundColor(context)),
+                      .bold18(color: Colors.white),
                 ),
                 loading
-                    ? const Row(
+                    ? Row(
                         children: [
                           SizedBox(
                             width: 30.0,
                           ),
+                          withIconProgress  ?
                           SizedBox(
                             width: 20.0,
                             height: 20.0,
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                          ),
+                          ): SizedBox()
                         ],
                       )
                     : const SizedBox()

@@ -7,6 +7,7 @@ class DataTableCollege extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Colegiatura');
     return DataTable2(
       columnSpacing: 12,
       horizontalMargin: 12,

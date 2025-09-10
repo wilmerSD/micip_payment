@@ -142,7 +142,6 @@ class LoginView extends StatelessWidget {
         ],
       ),
     );
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundColor(context),

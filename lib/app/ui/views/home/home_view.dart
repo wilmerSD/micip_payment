@@ -16,6 +16,7 @@ class HomeView extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context);
     return UserLayout(
       true,
+      withFooter: true,
       child: Center(
       child: ChangeNotifierProvider(
           create: (_) => HomeProvider(),

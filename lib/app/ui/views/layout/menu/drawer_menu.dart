@@ -25,15 +25,18 @@ class DrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final layoutProvider = context
         .watch<LayoutProvider>(); // Obtiene el provider actual
+    final colorTheme = Theme.of(context).colorScheme;
+    // Color colorDrawer = colorTheme.inversePrimary;
+     Color colorDrawer = AppColors.drawerColor(context);
     return Drawer(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       // elevation: 2.0,
-      backgroundColor: AppColors.drawerColor(context),
+      backgroundColor: colorDrawer,
       child: Column(
         children: [
           Container(
             width: double.infinity,
-            color: AppColors.drawerColor(context),
+            color: colorDrawer,
             child: GestureDetector(
               onTap: onTapCollapsed,
               child: DrawerHeader(

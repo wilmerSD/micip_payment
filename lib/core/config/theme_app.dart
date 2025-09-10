@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ThemeApp {
   final bool darkMode;
-
+  
   ThemeApp({required this.darkMode});
 
   ThemeData getTheme() => ThemeData(

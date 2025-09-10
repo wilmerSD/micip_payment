@@ -1,26 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cip_payment_web/app/models/paymentgenerated_model.dart';
 import 'package:cip_payment_web/app/models/quota_model.dart';
-import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/toast/toast.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/automatic_pay.dart';
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:cip_payment_web/core/helpers/custom_snackbar.dart';
+import 'package:cip_payment_web/core/helpers/generate_receipt.dart';
 import 'package:cip_payment_web/preferences/shared_preferences.dart';
 import 'package:cip_payment_web/services/culqi_service.dart';
-import 'package:cip_payment_web/services/firebase/monthlyfees_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cip_payment_web/services/firebase/quotas_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MonthlyfeesProvider with ChangeNotifier {
-  final monthlyfeesService = MonthlyfeesService();
+  final monthlyfeesService = QuotasService();
 
   String variablePrueba = 'hola id';
   int _selectedIndex = 0;
   final PageController pageController = PageController();
   int get selectedIndex => _selectedIndex;
-
+  double amoutToPay = 0;
   CulqiService culquiServise = CulqiService();
 
   TextEditingController ctrlCardNumber = TextEditingController(
@@ -57,6 +56,18 @@ class MonthlyfeesProvider with ChangeNotifier {
   }
 
   Future<void> pagar(BuildContext context) async {
+    print('asdasdasdasdasd');
+    await generateReceipt(
+      receiptNumber: 'prueba',
+      date: '07/09/25',
+      name: 'JOSE WILMER SANCHEZ DIAZ',
+      dni: '70833688',
+      subtotal: 25,
+      igv: 12,
+      total: 280,
+    );
+    print('tratando de generar recibo');
+    // return;
     final token = await crearTokenCulqi();
     final response = await culquiServise.payCulqui(
       token ?? '',
@@ -148,7 +159,7 @@ class MonthlyfeesProvider with ChangeNotifier {
   }
 
   List<QuotaModel> listQuotas = [];
-  bool isGettingPendingPay = false;
+  bool isGettingPendingPay = true;
 
   Future<void> fetchPendingPay(BuildContext context) async {
     isGettingPendingPay = true;
@@ -157,6 +168,7 @@ class MonthlyfeesProvider with ChangeNotifier {
     try {
       final response = await monthlyfeesService.fetchAllQuotas(id);
       listQuotas = response;
+
       listQuotas.sort((a, b) => (a.feeMonth ?? 0).compareTo(b.feeMonth ?? 0));
     } catch (e) {
       showToastGlobal(
@@ -166,15 +178,25 @@ class MonthlyfeesProvider with ChangeNotifier {
         "Ocurrio un error al tratar de optener sus cuotas pendientes. Detalles: $e",
       );
     } finally {
+      
       isGettingPendingPay = false;
+      print(isGettingPendingPay);
       notifyListeners();
     }
   }
 
-  double amoutToPay = 0;
   void togglePaid(int index, bool value) {
-    listQuotas[index].isSelected = value;
-
+    if (value) {
+      // ✅ Si quiere marcar, primero aseguramos que todas las anteriores estén marcadas
+      for (int i = 0; i <= index; i++) {
+        listQuotas[i].isSelected = true;
+      }
+    } else {
+      // ❌ Si quiere desmarcar, también desmarcamos todas las posteriores
+      for (int i = index; i < listQuotas.length; i++) {
+        listQuotas[i].isSelected = false;
+      }
+    }
     notifyListeners();
   }
 
@@ -189,7 +211,8 @@ class MonthlyfeesProvider with ChangeNotifier {
         .fold(0.0, (totalsum, q) => totalsum + (q.amount ?? 0));
   }
 
-  bool get allSelected => listQuotas.isNotEmpty && listQuotas.every((q) => q.isSelected);
+  bool get allSelected =>
+      listQuotas.isNotEmpty && listQuotas.every((q) => q.isSelected);
 
   void toggleSelectAll() {
     final allSelected = listQuotas.every((q) => q.isSelected);
@@ -197,5 +220,24 @@ class MonthlyfeesProvider with ChangeNotifier {
       quota.isSelected = !allSelected;
     }
     notifyListeners();
+  }
+
+  List<PaymentgeneratedModel> paymentHistoryQuotas = [];
+  bool isGettinHistory = false;
+
+  Future<void> getHistoryPayment(BuildContext context) async {
+    paymentHistoryQuotas.clear();
+    isGettinHistory = true;
+    final personId = PreferencesUser.personId;
+    try {
+      final response = await monthlyfeesService.historyPaymentQuotas(personId);
+      paymentHistoryQuotas.addAll(response);
+    } catch (e) {
+      showToastGlobal(context, 1, "error", kmessageErrorGeneral);
+      debugPrint(e.toString());
+    } finally {
+      isGettinHistory = false;
+      notifyListeners();
+    }
   }
 }

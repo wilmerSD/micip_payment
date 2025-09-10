@@ -1,9 +1,11 @@
+import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
 import 'package:cip_payment_web/routes/app_routes_name.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:web/web.dart' as web;
 
 class SplashView extends StatelessWidget {
@@ -12,13 +14,34 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Simula una espera antes de redirigir a la vista de inicio de sesión
+
+     Future.microtask(() async {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      await auth.loadPerson();
+      if (auth.isLoggedIn) {
+        if (auth.currentPerson?.isAdmin ?? false){
+          context.go(AppRoutesName.LAYOUT);
+        }
+        context.go(AppRoutesName.HOME);
+      } else {
+        context.go(AppRoutesName.LOGIN);
+      }
+    });
+
     Future.delayed(const Duration(milliseconds: 1000), () {
       context.go(AppRoutesName.LOGIN);
+
       if (kIsWeb) {
         web.window.history.replaceState(null, 'Home', '#/home');
       }
     });
 
+   
+    // context.go(AppRoutesName.LOGIN);
+
+    // if (kIsWeb) {
+    //   web.window.history.replaceState(null, 'Home', '#/home');
+    // }
     return Scaffold(
       backgroundColor: AppColors.backgroundColor(context),
       body: Center(
@@ -36,15 +59,19 @@ class SplashView extends StatelessWidget {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
-                          'assets/LOGO_CIP.png'), // Reemplaza con tu imagen
+                        'assets/LOGO_CIP.png',
+                      ), // Reemplaza con tu imagen
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                Text('MiCIP',
-                    style: AppTextStyle(context).bold45(
-                        color: AppColors.primaryConst,
-                        fontWeight: FontWeight.bold))
+                Text(
+                  'MiCIP',
+                  style: AppTextStyle(context).bold45(
+                    color: AppColors.primaryConst,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             SizedBox(

@@ -113,6 +113,7 @@ class AppColors {
   static const Color grey = Color.fromRGBO(71, 71, 73, 1);
   static const Color blueRecoverPass = Color.fromRGBO(0, 85, 184, 1);
   static const Color grayMiddle = Color.fromRGBO(147, 147, 178, 1);
+  static const Color grayDesactivate = Color.fromRGBO(135, 135, 135, 1);
   //----------------------------------------------------------------
   static const Color validationTimely = Color.fromRGBO(0, 196, 140, 1);
   static const Color validationMissing = Color.fromRGBO(231, 44, 49, 1);

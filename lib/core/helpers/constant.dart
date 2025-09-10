@@ -118,4 +118,3 @@ const textconfirmText = "ACEPTAR";
 const reasonMax = 100;
 
 //MESSAGE ERROR GENERAL
-const errorGeneral = 'Ups...Ocurrio un error, por favor intente nuevamente.';

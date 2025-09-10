@@ -54,7 +54,7 @@ class NavBar extends StatelessWidget {
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: Icon(
-                                Bootstrap.airplane,
+                                Iconsax.menu_1_outline,
                                 color: Colors.white,
                               ),
                             ),

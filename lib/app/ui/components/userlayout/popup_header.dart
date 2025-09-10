@@ -1,3 +1,4 @@
+import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/alert/alert_dialog_component.dart';
 import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
@@ -5,6 +6,7 @@ import 'package:cip_payment_web/routes/app_routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:provider/provider.dart';
 
 enum AnimationStyles { defaultStyle, custom, none }
 
@@ -60,7 +62,10 @@ class _PopupMenuExampleState extends State<PopupMenuExample> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialogComponent(
-                        onTapButton: () => context.go(AppRoutesName.LOGIN),
+                        onTapButton: () {
+                          Provider.of<AuthProvider>(context, listen: false).logout();
+                          context.go(AppRoutesName.LOGIN);
+                        } ,
                         title: "¿Seguro que quieres salir de MiCip?",
                       );
                     },

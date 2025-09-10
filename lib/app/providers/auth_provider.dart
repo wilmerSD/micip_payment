@@ -4,14 +4,15 @@ import 'package:cip_payment_web/services/firebase/person_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
 
-  
+  bool _isLoading = true;
   PersonModel? _currentPerson;
   DateTime? _birthDate;
   DateTime? _entryDate;
+  bool get isLoggedIn => _currentPerson != null;
+  bool get isLoading => _isLoading;
   
   DateTime? get birthDate => _birthDate;
   PersonModel? get currentPerson => _currentPerson;
@@ -22,12 +23,13 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
   Future<void> loadPerson() async {
+    _isLoading = true;
     final id = PreferencesUser.personId;
     if (id.isNotEmpty) {
       _currentPerson = await PersonService().getPersonById(id);
-      notifyListeners();
     }
-      
+    _isLoading = false;
+     notifyListeners();
   }
 
   void notifyChange() {
@@ -45,6 +47,7 @@ class AuthProvider with ChangeNotifier {
     _entryDate = date;
     notifyListeners();
   }
+
   int? get age {
     if (_birthDate == null) return null;
 
@@ -78,8 +81,14 @@ class AuthProvider with ChangeNotifier {
     return DateFormat('dd/MM/yyyy').format(_birthDate!);
   }
 
-  void logout() {
+  // void logout() {
+  //   _currentPerson = null;
+  //   notifyListeners();
+  // }
+
+   void logout() {
     _currentPerson = null;
+    PreferencesUser.personId = ''; // limpiar cache
     notifyListeners();
   }
 }

@@ -26,15 +26,24 @@ class PopupGeneral extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: AppColors.backgroundColor(context),
-       insetPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 30.0,
+      ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
       scrollable: scrollable,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
       ),
-      title: Text(title, style: titleStyle ?? AppTextStyle(context).bold26(
-                                          color: AppColors.primaryConst),),
-      content: content
+      title: title.isEmpty
+          ? null
+          : Text(
+              title,
+              style:
+                  titleStyle ??
+                  AppTextStyle(context).bold26(color: AppColors.primaryConst),
+            ),
+      content: content,
     );
   }
 }
