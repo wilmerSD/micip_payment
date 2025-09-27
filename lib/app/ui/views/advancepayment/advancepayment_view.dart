@@ -1,6 +1,6 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
 import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
 import 'package:cip_payment_web/app/ui/views/advancepayment/advancepayment_provider.dart';

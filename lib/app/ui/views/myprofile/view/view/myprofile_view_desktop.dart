@@ -1,4 +1,3 @@
-import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/alert/alert_dialog_component.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/container_options.dart';
@@ -9,8 +8,8 @@ import 'package:cip_payment_web/app/ui/views/myprofile/widgets/personal_data.dar
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/reset_pass.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
-import 'package:cip_payment_web/preferences/shared_preferences.dart';
-import 'package:cip_payment_web/preferences/theme_provider.dart';
+import 'package:cip_payment_web/core/preferences/shared_preferences.dart';
+import 'package:cip_payment_web/core/preferences/theme_provider.dart';
 import 'package:cip_payment_web/routes/app_routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

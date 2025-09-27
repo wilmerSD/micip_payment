@@ -1,7 +1,5 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_rounded.dart';
-import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
-import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -10,7 +8,10 @@ class PaymentGood extends StatelessWidget {
   const PaymentGood(
     this.operationId,
     this.dateTime,
-    this.amount, this.concept, {super.key});
+    this.amount,
+    this.concept, {
+    super.key,
+  });
 
   final double amount;
   final String concept;
@@ -22,13 +23,17 @@ class PaymentGood extends StatelessWidget {
     final colorTheme = Theme.of(context).colorScheme;
 
     final Color colorText = const Color.fromRGBO(90, 97, 111, 1);
-    return UserLayout(
-      true,
+    return SizedBox(
+      height: 600.0,
       child: Center(
         child: Container(
           padding: EdgeInsets.all(20.0),
           width: 420.0,
-          height: 550,
+          // height: 550,
+           margin: EdgeInsetsGeometry.symmetric(
+            horizontal: 30.0,
+            vertical: 30.0,
+          ),
           decoration: BoxDecoration(
             color: colorTheme.onInverseSurface,
             borderRadius: BorderRadius.circular(10.0),
@@ -80,17 +85,13 @@ class PaymentGood extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Monto',
-                            style: AppTextStyle(context).textPayment(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTextStyle(
+                              context,
+                            ).textPayment(fontWeight: FontWeight.bold),
                           ),
                         ),
                         Expanded(
-                          child: BtnRounded(
-                            Bootstrap.share,
-                            'Compartir',
-                            () {},
-                          ),
+                          child: BtnRounded(Bootstrap.share, 'Compartir', () {}),
                         ),
                       ],
                     ),
@@ -99,10 +100,11 @@ class PaymentGood extends StatelessWidget {
                       style: AppTextStyle(context).textPayment(),
                     ),
                     Divider(color: colorText, thickness: 0.5),
-                    
+      
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [Text('Concepto'), Text(concept)]),
+                      children: [Text('Concepto'), Text(concept)],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [Text('Igv'), Text('18%')],
@@ -119,7 +121,10 @@ class PaymentGood extends StatelessWidget {
                   ],
                 ),
               ),
-              BtnPrimary(text: 'Finalizar'),
+              BtnPrimary(
+                text: 'Finalizar',
+                onTap: () => Navigator.of(context).pop(),
+              ),
             ],
           ),
         ),

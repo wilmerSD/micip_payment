@@ -1,5 +1,4 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary.dart';
-import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -12,7 +11,7 @@ class PaymentBad extends StatelessWidget {
     super.key,
   });
 
-  final int operationId;
+  final String operationId;
   final String dateTime;
   final String detailError;
 
@@ -21,18 +20,22 @@ class PaymentBad extends StatelessWidget {
     final colorTheme = Theme.of(context).colorScheme;
 
     final Color colorText = const Color.fromRGBO(90, 97, 111, 1);
-    return UserLayout(
-      true,
+    return SizedBox(
+      height: 600,
       child: Center(
         child: Container(
           padding: EdgeInsets.all(20.0),
+          margin: EdgeInsetsGeometry.symmetric(
+            horizontal: 30.0,
+            vertical: 30.0,
+          ),
           width: 420.0,
-          height: 550.0,
+          // height: 550.0,
           decoration: BoxDecoration(
             color: colorTheme.onInverseSurface,
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Column(            
+          child: Column(
             spacing: 15.0,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,7 +52,7 @@ class PaymentBad extends StatelessWidget {
                         radius: 10,
                         child: Icon(
                           Bootstrap.x_circle_fill,
-                          color: colorTheme.error,// Colors.red,
+                          color: colorTheme.error, // Colors.red,
                           size: 20.0,
                         ),
                       ),
@@ -73,14 +76,24 @@ class PaymentBad extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 10.0,
                     children: [
-                      Text(detailError, style: AppTextStyle(context).textPayment(),),
+                      Text(
+                        detailError,
+                        style: AppTextStyle(context).textPayment(),
+                      ),
+                       Spacer(),
                       Divider(color: colorText, thickness: 0.5),
-                      Spacer(),
+                     
                       Center(
                         child: Column(
                           children: [
-                            Text(dateTime, style: AppTextStyle(context).textPayment(),),
-                            Text('Operación $operationId',style: AppTextStyle(context).textPayment(),),
+                            Text(
+                              dateTime,
+                              style: AppTextStyle(context).textPayment(),
+                            ),
+                            Text(
+                              'Operación $operationId',
+                              style: AppTextStyle(context).textPayment(),
+                            ),
                           ],
                         ),
                       ),
@@ -89,7 +102,10 @@ class PaymentBad extends StatelessWidget {
                 ),
               ),
               // Spacer(),
-              BtnPrimary(text: 'Volver',),
+              BtnPrimary(
+                text: 'Volver',
+                onTap: () => Navigator.of(context).pop(),
+              ),
             ],
           ),
         ),

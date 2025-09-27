@@ -1,5 +1,5 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/field_form.dart';
+import 'package:cip_payment_web/app/ui/components/fields/field_form.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/recoverpass_provider.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/widgets/custom_container.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/widgets/leading.dart';

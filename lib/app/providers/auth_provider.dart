@@ -1,6 +1,7 @@
-import 'package:cip_payment_web/app/models/person_model.dart';
-import 'package:cip_payment_web/preferences/shared_preferences.dart';
-import 'package:cip_payment_web/services/firebase/person_service.dart';
+import 'package:cip_payment_web/domain/entities/person.dart';
+import 'package:cip_payment_web/infrastructure/datasources/persondb_datasource.dart';
+import 'package:cip_payment_web/core/preferences/shared_preferences.dart';
+import 'package:cip_payment_web/infrastructure/repositories/person_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,25 +9,27 @@ import 'package:intl/intl.dart';
 class AuthProvider with ChangeNotifier {
 
   bool _isLoading = true;
-  PersonModel? _currentPerson;
+  Person? _currentPerson;
   DateTime? _birthDate;
   DateTime? _entryDate;
   bool get isLoggedIn => _currentPerson != null;
   bool get isLoading => _isLoading;
   
   DateTime? get birthDate => _birthDate;
-  PersonModel? get currentPerson => _currentPerson;
+  Person? get currentPerson => _currentPerson;
 
-  void setPerson(PersonModel person) async{
+  void setPerson(Person person) async{
     _currentPerson = person;
     PreferencesUser.personId = person.id; // se guarda directo
+    PreferencesUser.mainEmail = person.emailMain; // se guarda directo
     notifyListeners();
   }
   Future<void> loadPerson() async {
     _isLoading = true;
     final id = PreferencesUser.personId;
     if (id.isNotEmpty) {
-      _currentPerson = await PersonService().getPersonById(id);
+      // _currentPerson = await PersonService().getPersonById(id);
+      _currentPerson = await PersonRepositoryImpl(PersondbDatasource()).getPersonById(id);
     }
     _isLoading = false;
      notifyListeners();

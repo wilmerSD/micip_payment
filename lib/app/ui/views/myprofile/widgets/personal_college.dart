@@ -1,6 +1,7 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/read_only_field.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/data_table_college.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
@@ -17,21 +18,21 @@ class PersonalCollege extends StatelessWidget {
     final person = authProvider.currentPerson;
 
     /* 📌 Input cip del colegiado */
-    Widget inputCollege = DisplayText(
-      helperText: 'Numero Cip',
-      text: person?.numberCip ?? '',
+    Widget inputCollege = ReadOnlyField(
+      label: 'Numero Cip',
+      value: person?.numberCip ?? '',
     );
 
     /* 📌 Input fecha de ingreso al colegio de ingenieros */
-    Widget inputEntryDate = DisplayText(
-      helperText: 'Fecha de ingreso',
-      text: '23/07/2020', //person?.numberCip ?? '',
+    Widget inputEntryDate = ReadOnlyField(
+      label: 'Fecha de ingreso',
+      value: '23/07/2020', //person?.numberCip ?? '',
     );
 
     /* 📌 Input catidad de años del colegiado*/
-    Widget inputQuantityAges = DisplayText(
-      helperText: 'Años de colegiado',
-      text: authProvider.yearsOfMembership.toString(),
+    Widget inputQuantityAges = ReadOnlyField(
+      label: 'Años de colegiado',
+      value: authProvider.yearsOfMembership.toString(),
     );
 
     /* 📌 btn para cambiar la contraseña */

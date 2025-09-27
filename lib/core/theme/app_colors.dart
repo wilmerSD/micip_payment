@@ -29,7 +29,7 @@ class AppColors {
 
   static Color textQuaternaryBasic(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromRGBO(109, 108, 108, 1) //dark
+        ? const Color.fromRGBO(230, 230, 230, 1) //dark
         : const Color.fromRGBO(109, 108, 108, 1); //light
   } 
 
@@ -93,7 +93,12 @@ class AppColors {
         ? const Color.fromRGBO(255, 216, 214, 1) //dark
         : const Color.fromARGB(27, 21, 61, 1); //light
   }
-
+  static Color fillTextColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(113, 113, 113, 1) //dark
+        : const Color.fromRGBO(246, 247, 249, 1); //light
+  }
+  
   //Colores constantes
   static const Color primaryConst = Color.fromRGBO(227, 30, 36, 1);
   // static const Color drawerColor = Color.fromRGBO(205, 46, 46, 1);

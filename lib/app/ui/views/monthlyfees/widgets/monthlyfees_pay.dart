@@ -1,22 +1,30 @@
+import 'package:cip_payment_web/app/ui/components/alert/popup_general.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
+import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
+import 'package:cip_payment_web/app/ui/components/payment/payment_bad.dart';
+import 'package:cip_payment_web/app/ui/components/payment/payment_good.dart';
+import 'package:cip_payment_web/app/ui/components/reciept/select_receipt.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
+import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/checkout_monthlyfees.dart';
+import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/link_pay.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/nodebt_view.dart';
+import 'package:cip_payment_web/core/config/environment.dart';
 import 'package:cip_payment_web/core/helpers/helpers.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
 import 'package:cip_payment_web/routes/app_routes_name.dart';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MonthlyfeesPay extends StatelessWidget {
   const MonthlyfeesPay({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print('hoola');
+    debugPrint('Hola MonthlyfeesPay');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: context.watch<MonthlyfeesProvider>().isGettingPendingPay
@@ -87,32 +95,19 @@ class MonthlyfeesPay extends StatelessWidget {
                         withIconProgress: false,
                         loading: provider.totalSelected == 0,
                         text: 'Pagar S/. ${provider.totalSelected}',
-                        onTap: () {
-                          // provider.pagar(context);
-                          // context.go(
-                          //   AppRoutesName.PAYMENTGOOD,
-                          //   extra: {'amount': 20, 'title': 'Cuotas mensuales'},
-                          // );
-                          context.go(
-                            AppRoutesName.PAYMENTBAD,
-                            extra: {
-                              'operationId': 177796497,
-                              'dateTime':
-                                  '11 de diciembre de 2025 - 14:29 horas ',
-                              'detailError':
-                                  'Las compras por internet de su tarjeta no esta habilitada.',
-                            },
-                          );
+                        onTap: () async {
                           // ModalUtils.getShowModalBS(
                           //   context,
                           //   content: SelectReceipt(
                           //     mainText: 'Pagar S/. ${provider.totalSelected}',
                           //     textBtn: 'Continuar',
                           //     textPopUp: 'Pagar cuota mensual',
-                          //     content: SizedBox()// CheckoutMonthlyfees(),
+                          //     content:  CheckoutMonthlyfees(),
                           //   ),
                           //   title: 'Detalle de pago',
                           // );
+                          context.read<MonthlyfeesProvider>().prueba();
+                          // context.read<MonthlyfeesProvider>().openCheckout(context);
                         },
                       );
                     },

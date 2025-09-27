@@ -1,16 +1,23 @@
-import 'package:cip_payment_web/app/models/course_model.dart';
-import 'package:cip_payment_web/app/models/modality_model.dart';
-import 'package:cip_payment_web/app/models/state_model.dart';
+import 'package:cip_payment_web/domain/entities/course.dart';
+import 'package:cip_payment_web/infrastructure/datasources/authdb_datasource.dart';
+import 'package:cip_payment_web/infrastructure/datasources/coursedb_datasource.dart';
+import 'package:cip_payment_web/infrastructure/models/course_model.dart';
+import 'package:cip_payment_web/infrastructure/models/modality_model.dart';
+import 'package:cip_payment_web/infrastructure/models/state_model.dart';
 import 'package:cip_payment_web/app/ui/components/toast/toast.dart';
 import 'package:cip_payment_web/core/helpers/helpers.dart';
-import 'package:cip_payment_web/services/firebase/course_service.dart';
+import 'package:cip_payment_web/infrastructure/repositories/auth_repository_impl.dart';
+import 'package:cip_payment_web/infrastructure/repositories/course_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CourseProvider with ChangeNotifier {
-  final courseService = CourseService();
+  final CourseRepositoryImpl courseRepositoryImpl = CourseRepositoryImpl(CoursedbDatasource());
+  final AuthRepositoryImpl authRepositoryImpl = AuthRepositoryImpl(
+    AuthdbDatasource(),
+  );
+
   TextEditingController ctrlDescriptionCourse = TextEditingController();
   TextEditingController ctrlEndDateCourse = TextEditingController(
       text: Helpers.dateToStringTimeDMY(
@@ -26,7 +33,7 @@ class CourseProvider with ChangeNotifier {
   TextEditingController ctrlImageCourse = TextEditingController();
   TextEditingController ctrlTypeCourse = TextEditingController();
 
-  List<CourseModel> listCourses = [];
+  List<Course> listCourses = [];
   List<StateModel> stateCourses = [
     StateModel(isActive: true, descripcion: 'Activo'),
     StateModel(isActive: false, descripcion: 'Desactivado'),
@@ -51,7 +58,7 @@ class CourseProvider with ChangeNotifier {
 
   Future<void> createCourse(BuildContext context) async {
     try {
-      final response = await courseService.createCourse(CourseModel(
+      final response = await courseRepositoryImpl.createCourse(CourseModel(
           itIsExternal: currentItIsExternal.isActive,
           createDate: Timestamp.fromDate(DateTime.now()),
           descriptionCourse: ctrlDescriptionCourse.text,
@@ -67,7 +74,7 @@ class CourseProvider with ChangeNotifier {
           stateCourse: currentStateCourse.isActive,
           totalTimeHours: int.tryParse(ctrlTotalTimeHours.text) ?? 0,
           updatedDate: Timestamp.fromDate(DateTime.now())));
-      if (response != null && response.isNotEmpty) {
+      if (response != null) {
         showToastGlobal(context, 0, "success", "Mensaje de éxito");
         context.pop();
         return;
@@ -80,9 +87,9 @@ class CourseProvider with ChangeNotifier {
   void cleanSearch() {}
   Future<void> getCourse() async {
     try {
-      final response = await courseService.fetchAllCourse();
+      final response = await courseRepositoryImpl.fetchAllCourse();
       if (response.isNotEmpty) {
-        listCourses = response;
+        listCourses.addAll(response);
       }
       notifyListeners();
     } catch (e) {
@@ -105,7 +112,7 @@ class CourseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void equalVarToEdit(CourseModel course) {
+  void equalVarToEdit(Course course) {
     ctrlDescriptionCourse.text = course.descriptionCourse ?? '';
     ctrlEndDateCourse.text = Helpers.timestampToString(course.endDateCourse!);
     ctrlEndDateRegistration.text =

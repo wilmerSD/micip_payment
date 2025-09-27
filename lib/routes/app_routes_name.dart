@@ -31,9 +31,9 @@ abstract class AppRoutesName {
 
   static const RESETPASS = "/resetpass";
   static const RECOVERPASS = "/recoverpass";
-  static const RECOVERPASSEMAIL = "recoverpassemail";
-  static const RECOVERPASSCODE = "recoverpasscode";
-  static const RECOVERPASSNEW = "recoverpassnew";
+  static const RECOVERPASSEMAIL = "/recoverpassemail";
+  static const RECOVERPASSCODE = "/recoverpasscode";
+  static const RECOVERPASSNEW = "/recoverpassnew";
   
   
 

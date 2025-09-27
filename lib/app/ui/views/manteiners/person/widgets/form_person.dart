@@ -1,6 +1,6 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_third.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/person/person_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

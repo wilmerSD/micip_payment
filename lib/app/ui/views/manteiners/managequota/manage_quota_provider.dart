@@ -1,15 +1,19 @@
-import 'package:cip_payment_web/app/models/month_model.dart';
-import 'package:cip_payment_web/app/models/quota_model.dart';
+import 'package:cip_payment_web/domain/entities/quota.dart';
+import 'package:cip_payment_web/infrastructure/datasources/quotadb_datasource.dart';
+import 'package:cip_payment_web/infrastructure/models/month_model.dart';
+import 'package:cip_payment_web/infrastructure/models/quota_model.dart';
 import 'package:cip_payment_web/app/ui/components/toast/toast.dart';
-import 'package:cip_payment_web/services/firebase/manage_quotas_service.dart';
+import 'package:cip_payment_web/infrastructure/repositories/quota_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ManageQuotaProvider with ChangeNotifier {
-  final ManageQuotasService cuotasService = ManageQuotasService();
-  List<QuotaModel> listQuotas = [];
+  final QuotaRepositoryImpl quotaRepositoryImpl = QuotaRepositoryImpl(
+    QuotadbDatasource(),
+  );
+  List<Quota> listQuotas = [];
   String personId = '';
   double amount = 0;
   int feeMonth = 0;
@@ -44,10 +48,11 @@ class ManageQuotaProvider with ChangeNotifier {
   // );
   MonthModel currentMonth = MonthModel(id: 8, month: 'Agosto');
   Future<void> getGeneratedPayments() async {
+    listQuotas.clear();
     try {
-      final response = await cuotasService.fetchAllQuotas();
+      final response = await quotaRepositoryImpl.fetchAllQuotas();
       if (response.isNotEmpty) {
-        listQuotas = response;
+        listQuotas.addAll(response);
       }
       print(response);
     } catch (e) {
@@ -59,7 +64,8 @@ class ManageQuotaProvider with ChangeNotifier {
 
   Future<void> createMemberFee() async {
     try {
-      final response = cuotasService.createQuota(
+      /*  final response =  */
+      await quotaRepositoryImpl.createQuota(
         QuotaModel(
           personId: '',
           amount: amount,
@@ -79,7 +85,8 @@ class ManageQuotaProvider with ChangeNotifier {
   Future<void> generateQuotasForAllPersons(BuildContext context) async {
     amount = int.tryParse(ctrlAmount.toString())?.toDouble() ?? 30.0;
     try {
-      final response = cuotasService.generateQuotasForEligiblePersons(
+      /*  final response =  */
+      await quotaRepositoryImpl.generateQuotasForEligiblePersons(
         feeMonth: currentMonth.id,
         feeYear: feeYear,
         amount: amount,
@@ -92,12 +99,7 @@ class ManageQuotaProvider with ChangeNotifier {
         "Las cuotas fueron generadas correctamente.",
       );
     } catch (e) {
-      showToastGlobal(
-        context,
-        0,
-        "error",
-        "Ocurrio un error, detalles: $e",
-      );
+      showToastGlobal(context, 0, "error", "Ocurrio un error, detalles: $e");
     } finally {}
   }
 }

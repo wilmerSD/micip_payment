@@ -1,6 +1,6 @@
 import 'package:cip_payment_web/app/ui/components/alert/popup_general.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/views/advancepayment/advancepayment_provider.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/checkout_monthlyfees.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:cip_payment_web/app/ui/components/alert/popup_general.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/field_form.dart';
+import 'package:cip_payment_web/app/ui/components/fields/field_form.dart';
 import 'package:cip_payment_web/app/ui/components/terms_and_conditions.dart';
 import 'package:cip_payment_web/app/ui/views/login/login_provider.dart';
 import 'package:cip_payment_web/app/ui/views/login/logo.dart';
@@ -168,10 +168,10 @@ class LoginView extends StatelessWidget {
                         // const SizedBox(height: 15.0),
                         rememberPass,
                         // const SizedBox(height: 15.0),
-                        Spacer(),
+                        // Spacer(),
                         button,
                         const SizedBox(height: 10.0),
-                        // Center(child: forgotPassword),
+                        Center(child: forgotPassword),
                       ],
                     ),
                   ),

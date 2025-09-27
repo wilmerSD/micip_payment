@@ -1,14 +1,16 @@
-import 'package:cip_payment_web/app/models/person_model.dart';
 import 'package:cip_payment_web/app/ui/components/toast/toast.dart';
 import 'package:cip_payment_web/core/helpers/constant.dart';
-import 'package:cip_payment_web/core/helpers/custom_snackbar.dart';
-import 'package:cip_payment_web/services/firebase/person_service.dart';
+import 'package:cip_payment_web/domain/entities/person.dart';
+import 'package:cip_payment_web/infrastructure/datasources/persondb_datasource.dart';
+import 'package:cip_payment_web/infrastructure/models/person_model.dart';
+import 'package:cip_payment_web/infrastructure/repositories/person_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class PersonProvider with ChangeNotifier {
-  final personService = PersonService();
+  final PersonRepositoryImpl persondbDatasource = PersonRepositoryImpl(PersondbDatasource());
+  
 
   TextEditingController dni = TextEditingController(text: '');
   TextEditingController address = TextEditingController(text: '');
@@ -34,7 +36,7 @@ class PersonProvider with ChangeNotifier {
 
   Future<void> newPerson(BuildContext context) async {
     try {
-      final response = await personService.createPerson(
+      final response = await persondbDatasource.createPerson(
         PersonModel(
           id: '',
           address: address.text,
@@ -57,7 +59,7 @@ class PersonProvider with ChangeNotifier {
           statePerson: true,
         ),
       );
-      if (response.isNotEmpty) {
+      if (response !=null) {
         showToastGlobal(
           context,
           0,
@@ -74,13 +76,14 @@ class PersonProvider with ChangeNotifier {
     } finally {}
   }
 
-  List<PersonModel> listPersons = [];
+  List<Person> listPersons = [];
   Future<void> getAllPerson() async {
+    listPersons.clear();
     try {
-      final response = await personService.fetchAllPersons();
+      final response = await persondbDatasource.fetchAllPersons();
 
       if (response.isNotEmpty) {
-        listPersons = response;
+        listPersons.addAll(response);
       }
       print('get persons');
       print(listPersons.length);

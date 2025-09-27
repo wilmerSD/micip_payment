@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -6,6 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Helpers {
+  static final List<String> months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
   static String formatTime(String dateTimeString) {
     DateTime dateTime = DateTime.parse(dateTimeString);
     return DateFormat('HH:mm').format(dateTime);
@@ -14,21 +30,31 @@ class Helpers {
   static String formatDateddMMString(String date) {
     if (date.isEmpty) return '';
     DateTime parsedDate = DateTime.parse(date);
-    List<String> months = [
-      "Ene",
-      "Feb",
-      "Mar",
-      "Abr",
-      "May",
-      "Jun",
-      "Jul",
-      "Ago",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dic"
-    ];
     return "${parsedDate.day}/${months[parsedDate.month - 1]}";
+  }
+
+  static String formatCustomDate(int? timestampMs) {
+    final date = timestampMs != null
+        ? DateTime.fromMillisecondsSinceEpoch(timestampMs)
+        : DateTime.now();
+
+    final day = date.day;
+    final month = months[date.month - 1];
+    final year = date.year;
+
+    final hour = date.hour.toString().padLeft(2, '0');
+    final minute = date.minute.toString().padLeft(2, '0');
+
+    return "$day de $month de $year - $hour:$minute horas";
+  }
+
+  static String generateRandomOperationNumber({int length = 13}) {
+    final random = Random();
+    const chars = '0123456789';
+    return List.generate(
+      length,
+      (index) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   static String getNameMonth(int month) {
@@ -45,11 +71,10 @@ class Helpers {
       "Septiembre",
       "Octubre",
       "Noviembre",
-      "Diciembre"
+      "Diciembre",
     ];
-    return months[month-1];
+    return months[month - 1];
   }
-
 
   static String capitalize(String text) {
     if (text.isEmpty) return text;
@@ -59,24 +84,25 @@ class Helpers {
   /* 📌 Obtener iniciales de los nombres*/
   static String getInitial(String name) {
     if (name.isEmpty) return '';
-    
+
     List<String> parts = name.trim().split(' ');
     /* String initials = parts
         .where((part) => part.isNotEmpty) // Elimina strings vacíos
         .map((part) => part[0].toUpperCase()) // Toma la primera letra
         .join(); */
-     String initials = parts
-      .where((part) => part.isNotEmpty) // Filtrar vacíos primero
-      .take(2) // Solo las primeras dos palabras
-      .map((part) => part[0].toUpperCase())
-      .join();
+    String initials = parts
+        .where((part) => part.isNotEmpty) // Filtrar vacíos primero
+        .take(2) // Solo las primeras dos palabras
+        .map((part) => part[0].toUpperCase())
+        .join();
     return initials;
   }
 
   static String formattedDateToDMA(DateTime? date) {
     if (date == null) return 'Fecha no disponible';
 
-    String formattedDate = '${date.day.toString().padLeft(2, '0')}/'
+    String formattedDate =
+        '${date.day.toString().padLeft(2, '0')}/'
         '${date.month.toString().padLeft(2, '0')}/'
         '${date.year.toString().substring(2)}';
 
@@ -88,11 +114,15 @@ class Helpers {
     String formattedText = '';
     formattedText = text.replaceAll(RegExp(r'</(p|span)>'), '\n');
     formattedText = formattedText.replaceAll(
-        RegExp(
-            r'<span style="font-family:verdana,arial; font-size:10px; font-stretch:normal; font-style:normal;"><strong>'),
-        '');
+      RegExp(
+        r'<span style="font-family:verdana,arial; font-size:10px; font-stretch:normal; font-style:normal;"><strong>',
+      ),
+      '',
+    );
     formattedText = formattedText.replaceAll(
-        RegExp(r'<span><br>------------------------------<br></p>'), '');
+      RegExp(r'<span><br>------------------------------<br></p>'),
+      '',
+    );
     formattedText = formattedText.replaceAll(RegExp(r'<p>'), '');
     formattedText = formattedText.replaceAll(RegExp(r'<br>'), '');
     formattedText = formattedText.replaceAll(RegExp(r'<span>'), '');
@@ -113,7 +143,8 @@ class Helpers {
   static String formattedDateddmmyy(DateTime? date) {
     if (date == null) return 'Fecha no disponible';
 
-    String formattedDate = '${date.day.toString().padLeft(2, '0')}/'
+    String formattedDate =
+        '${date.day.toString().padLeft(2, '0')}/'
         '${date.month.toString().padLeft(2, '0')}/'
         '${date.year.toString().substring(2)}';
 
@@ -144,7 +175,7 @@ class Helpers {
       return DateTime.now();
     }
   }
-  
+
   static String timestampToString(Timestamp timeStamp) {
     try {
       DateTime date = timeStamp.toDate();
@@ -156,8 +187,9 @@ class Helpers {
   }
 
   static noRequiredDateTime(String? value, String date) {
-    RegExp fechaRegex =
-        RegExp(r'^(\d{4})/(0[1-9]|1[0-2])/(0[1-9]|1\d|2\d|3[01])$');
+    RegExp fechaRegex = RegExp(
+      r'^(\d{4})/(0[1-9]|1[0-2])/(0[1-9]|1\d|2\d|3[01])$',
+    );
     if (value == null || value.isEmpty) {
       return null;
     } else if (!fechaRegex.hasMatch(date)) {
@@ -168,8 +200,9 @@ class Helpers {
   }
 
   static noRequiredDateTimeDMY(String? value, String date) {
-    RegExp fechaRegex =
-        RegExp(r'^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$');
+    RegExp fechaRegex = RegExp(
+      r'^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$',
+    );
     if (value == null || value.isEmpty) {
       return null;
     } else if (!fechaRegex.hasMatch(date)) {
@@ -179,9 +212,7 @@ class Helpers {
     }
   }
 
-  static String? regexFormSearch(
-    String? value,
-  ) {
+  static String? regexFormSearch(String? value) {
     final regExp = RegExp(r'^$|^[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\_\(\)\/]*$');
     if (value == null || value.isEmpty) {
       return null;
@@ -208,7 +239,7 @@ class Helpers {
     }
   }
 
-/* 📌 comparar fechas en formato dd/mm/yyyy*/
+  /* 📌 comparar fechas en formato dd/mm/yyyy*/
   static int compareDatesDMY(String date1, String date2) {
     DateFormat format = DateFormat("dd/MM/yyyy");
     if (date1.isEmpty || date2.isEmpty) {
@@ -335,16 +366,19 @@ class Helpers {
     return formato.format(fecha);
   }
 
-  static Timestamp? stringToTimestamp(String dateString, {String format = "dd-MM-yyyy"}) {
-  try {
-    final DateFormat formatter = DateFormat(format);
-    final DateTime parsedDate = formatter.parse(dateString);
+  static Timestamp? stringToTimestamp(
+    String dateString, {
+    String format = "dd-MM-yyyy",
+  }) {
+    try {
+      final DateFormat formatter = DateFormat(format);
+      final DateTime parsedDate = formatter.parse(dateString);
 
-    return Timestamp.fromDate(parsedDate);
-  } catch (e) {
-    return null;
+      return Timestamp.fromDate(parsedDate);
+    } catch (e) {
+      return null;
+    }
   }
-}
 
   /* 📌 Comparar que las contraseñas ingresadas sean iguales */
   static String? comparePassword(String firstPass, String secondPass) {
@@ -360,8 +394,9 @@ class Helpers {
     if (value == null || value.isEmpty) {
       return "Seleccionar una fecha";
     } else {
-      final RegExp dateRegex =
-          RegExp(r'^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$');
+      final RegExp dateRegex = RegExp(
+        r'^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$',
+      );
       if (!dateRegex.hasMatch(value)) {
         return "Formato de fecha inválido";
       }
@@ -374,8 +409,9 @@ class Helpers {
     if (value == null || value.isEmpty) {
       return null;
     } else {
-      final RegExp dateRegex =
-          RegExp(r'^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$');
+      final RegExp dateRegex = RegExp(
+        r'^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$',
+      );
       if (!dateRegex.hasMatch(value)) {
         return "Formato de fecha inválido";
       }
@@ -385,29 +421,37 @@ class Helpers {
 
   /* 📌 Cambiar formato de fecha de yyyy/MM/dd a dd/MM/yyyy */
   static String changeDateToddMMyyyy(String date) {
-    DateFormat inputFormat =
-        DateFormat('yyyy/MM/dd'); // Define el formato de entrada
-    DateFormat outputFormat =
-        DateFormat('dd/MM/yyyy'); // Define el formato de salida
+    DateFormat inputFormat = DateFormat(
+      'yyyy/MM/dd',
+    ); // Define el formato de entrada
+    DateFormat outputFormat = DateFormat(
+      'dd/MM/yyyy',
+    ); // Define el formato de salida
 
-    DateTime dateTime =
-        inputFormat.parse(date); // Convierte la cadena de texto a DateTime
+    DateTime dateTime = inputFormat.parse(
+      date,
+    ); // Convierte la cadena de texto a DateTime
     String formattedDateString = outputFormat.format(
-        dateTime); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
+      dateTime,
+    ); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
     return formattedDateString;
   }
 
   /* 📌 Cambiar formato de fecha de  dd/MM/yyyy  a yyyy/MM/dd */
   static String changeDateToyyyyMMdd(String date) {
-    DateFormat inputFormat =
-        DateFormat('dd/MM/yyyy'); // Define el formato de entrada
-    DateFormat outputFormat =
-        DateFormat('yyyy/MM/dd'); // Define el formato de salida
+    DateFormat inputFormat = DateFormat(
+      'dd/MM/yyyy',
+    ); // Define el formato de entrada
+    DateFormat outputFormat = DateFormat(
+      'yyyy/MM/dd',
+    ); // Define el formato de salida
 
-    DateTime dateTime =
-        inputFormat.parse(date); // Convierte la cadena de texto a DateTime
+    DateTime dateTime = inputFormat.parse(
+      date,
+    ); // Convierte la cadena de texto a DateTime
     String formattedDateString = outputFormat.format(
-        dateTime); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
+      dateTime,
+    ); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
     return formattedDateString;
   }
 
@@ -428,16 +472,30 @@ class Helpers {
 
   /* 📌 Cambiar formato de fecha de yyyy/MM/dd a dd/MM/yyyy */
   static String changeDateTodMy(String date) {
-    DateFormat inputFormat =
-        DateFormat('yyyy-MM-dd'); // Define el formato de entrada
-    DateFormat outputFormat =
-        DateFormat('dd/MM/yyyy'); // Define el formato de salida
+    DateFormat inputFormat = DateFormat(
+      'yyyy-MM-dd',
+    ); // Define el formato de entrada
+    DateFormat outputFormat = DateFormat(
+      'dd/MM/yyyy',
+    ); // Define el formato de salida
 
-    DateTime dateTime =
-        inputFormat.parse(date); // Convierte la cadena de texto a DateTime
+    DateTime dateTime = inputFormat.parse(
+      date,
+    ); // Convierte la cadena de texto a DateTime
     String formattedDateString = outputFormat.format(
-        dateTime); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
+      dateTime,
+    ); // Convierte DateTime de vuelta a la cadena de texto con el nuevo formato
     return formattedDateString;
   }
 
+  static int toCents(double soles, {bool truncate = false}) {
+    if (truncate) {
+      // Truncar a 2 decimales sin redondear
+      double truncated = (soles * 100).truncateToDouble() / 100;
+      return (truncated * 100).toInt();
+    } else {
+      // Redondear al entero más cercano
+      return (soles * 100).round();
+    }
+  }
 }

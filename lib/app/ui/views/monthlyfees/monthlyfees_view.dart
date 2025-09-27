@@ -1,8 +1,10 @@
 import 'package:cip_payment_web/app/ui/components/custom_tab_switch.dart';
+import 'package:cip_payment_web/app/ui/components/tittle_pay.dart';
 import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/monthlyfees_history.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/monthlyfees_pay.dart';
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
@@ -26,14 +28,13 @@ class _MonthlyfeesViewState extends State<MonthlyfeesView> {
         context,
         listen: false,
       );
-      monthlyfeesProvider.selectTab(0);
-      monthlyfeesProvider.fetchPendingPay(context);
+      monthlyfeesProvider.onInit(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('Vista de cuotas mensuales');
+    debugPrint('Vista de cuotas mensuales');
     return UserLayout(
       true,
       child: Column(
@@ -56,12 +57,7 @@ class _MonthlyfeesViewState extends State<MonthlyfeesView> {
   }
 }
 
-Widget _tittle(BuildContext context) {
-  return Text(
-    'Cuotas Mensuales',
-    style: AppTextStyle(context).textTittleContent(),
-  );
-}
+
 
 // Widget _options(BuildContext context) {
 //   return CustomTabSwitch(
@@ -125,7 +121,7 @@ Widget _customHedaer(BuildContext context) {
             ? Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: _tittle(context)),
+                  Expanded(child: TittlePay(textMonthlyfees)),
                   Expanded(child: _options()),
                   // Expanded(child: _automaticPay(context)),
                   Expanded(child: SizedBox()),
@@ -138,7 +134,7 @@ Widget _customHedaer(BuildContext context) {
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(child: _tittle(context)),
+                            Expanded(child: TittlePay(textMonthlyfees)),
                             // Expanded(child: _automaticPay(context)),
                             Expanded(child: SizedBox()),
                           ],
@@ -156,7 +152,7 @@ Widget _customHedaer(BuildContext context) {
                       spacing: 20.0,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _tittle(context),
+                        TittlePay(textMonthlyfees),
                         // _automaticPay(context),
                         // SizedBox(),
                         _options(),
@@ -166,7 +162,7 @@ Widget _customHedaer(BuildContext context) {
           spacing: 20.0,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _tittle(context),
+            TittlePay(textMonthlyfees),
             _automaticPay(context),
             Expanded(child: _automaticPay(context)),
             _options(),

@@ -1,8 +1,6 @@
-import 'package:cip_payment_web/app/ui/views/home/footer/footer_desktop.dart';
 import 'package:cip_payment_web/app/ui/views/home/home_provider.dart';
-import 'package:cip_payment_web/app/ui/views/home/widgets/drawer_menu_app.dart';
 import 'package:cip_payment_web/app/ui/views/home/widgets/option_type_pay.dart';
-import 'package:cip_payment_web/core/theme/app_colors.dart';
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:cip_payment_web/routes/app_routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +24,7 @@ class HomeViewDesktop extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             OptionTypePay(
-              text: 'Cuotas mensuales',
+              text: textMonthlyfees,
               icon: Bootstrap.calendar2_check,
               context: context,
               colorBackIcon: const Color.fromRGBO(108, 14, 16, .5),
@@ -35,7 +33,7 @@ class HomeViewDesktop extends StatelessWidget {
               whatPlatformIs: 2,
             ),
             OptionTypePay(
-              text: 'Certificado de habilidad',
+              text: textCertificateskill,
               icon: Bootstrap.award,
               context: context,
               colorBackIcon: const Color.fromRGBO(215, 181, 109, .5),
@@ -44,7 +42,7 @@ class HomeViewDesktop extends StatelessWidget {
               whatPlatformIs: 2,
             ),
             OptionTypePay(
-              text: 'Constancia de no adeudo',
+              text:  textProofnodebt,
               icon: Bootstrap.file_earmark_text,
               context: context,
               colorBackIcon: const Color.fromRGBO(42, 42, 41, .5),
@@ -53,7 +51,7 @@ class HomeViewDesktop extends StatelessWidget {
               whatPlatformIs: 2,
             ),
             OptionTypePay(
-              text: 'Adelanto de cuotas',
+              text: textAdvancepayment,
               icon: Bootstrap.cash_stack,
               context: context,
               colorBackIcon: const Color.fromRGBO(227, 30, 36, .5),

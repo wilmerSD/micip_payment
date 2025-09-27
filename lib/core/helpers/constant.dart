@@ -117,4 +117,9 @@ const textconfirmText = "ACEPTAR";
 //MAXIMUN CHARACTERES IN TEXT FIELDS
 const reasonMax = 100;
 
-//MESSAGE ERROR GENERAL
+//TITTLES TYPE PAY
+// TEXT BOTONS
+const textMonthlyfees = "Cuotas mensuales";
+const textCertificateskill = "Certificado de habilidad";
+const textProofnodebt = "Constancia de no adeudo";
+const textAdvancepayment = "Adelanto de cuotas";

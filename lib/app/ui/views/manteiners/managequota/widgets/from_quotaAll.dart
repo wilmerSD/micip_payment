@@ -1,7 +1,7 @@
-import 'package:cip_payment_web/app/models/month_model.dart';
+import 'package:cip_payment_web/infrastructure/models/month_model.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_third.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/components/dropdown/dropdown_select.dart';
 import 'package:cip_payment_web/app/ui/components/dropdown/option_select.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/managequota/manage_quota_provider.dart';

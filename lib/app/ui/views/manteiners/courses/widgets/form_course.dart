@@ -1,9 +1,9 @@
 // import 'package:cip_payment_app/app/ui/components/custom_dropdown_menu.dart';
-import 'package:cip_payment_web/app/models/modality_model.dart';
-import 'package:cip_payment_web/app/models/state_model.dart';
+import 'package:cip_payment_web/infrastructure/models/modality_model.dart';
+import 'package:cip_payment_web/infrastructure/models/state_model.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_third.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/components/dropdown/dropdown_select.dart';
 import 'package:cip_payment_web/app/ui/components/dropdown/option_select.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/courses/course_provider.dart';

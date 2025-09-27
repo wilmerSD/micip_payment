@@ -1,10 +1,12 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/custom_text_field.dart';
+import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
 import 'package:cip_payment_web/app/ui/components/reciept/select_receipt.dart';
+import 'package:cip_payment_web/app/ui/components/tittle_pay.dart';
 import 'package:cip_payment_web/app/ui/views/certificateskill/certificateskill_provider.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/checkout_monthlyfees.dart';
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +18,11 @@ class CertificateSkillViewDesktop extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 15.0,
         children: [
-           
+          TittlePay(textCertificateskill),
+
           const SizedBox(),
           Row(
             spacing: 30.0,
@@ -27,7 +31,6 @@ class CertificateSkillViewDesktop extends StatelessWidget {
               Expanded(child: inputCipCertificate(context)),
               Expanded(child: inputEmailCertificate(context)),
               Expanded(child: inputStateCertificate(context)),
-              
             ],
           ),
           Row(

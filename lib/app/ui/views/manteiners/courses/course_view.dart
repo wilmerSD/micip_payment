@@ -1,7 +1,7 @@
 import 'package:cip_payment_web/app/ui/components/alert/popup_general.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
-import 'package:cip_payment_web/app/ui/components/input_primary.dart';
+import 'package:cip_payment_web/app/ui/components/fields/input_primary.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/courses/course_provider.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/courses/widgets/form_course.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/courses/widgets/table_course.dart';

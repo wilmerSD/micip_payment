@@ -1,4 +1,6 @@
+import 'package:cip_payment_web/app/ui/components/tittle_pay.dart';
 import 'package:cip_payment_web/app/ui/views/certificateskill/view/certificateskill_view_desktop.dart';
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:flutter/material.dart';
 
 class CertificateSkillViewTablet extends StatelessWidget {
@@ -11,6 +13,7 @@ class CertificateSkillViewTablet extends StatelessWidget {
       child: Column(
         spacing: 15.0,
         children: [
+          TittlePay(textCertificateskill),
           const SizedBox(),
           Row(
             spacing: 30.0,

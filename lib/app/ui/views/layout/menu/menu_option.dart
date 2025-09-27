@@ -1,4 +1,4 @@
-import 'package:cip_payment_web/app/models/response_menu_model.dart';
+import 'package:cip_payment_web/infrastructure/models/response_menu_model.dart';
 import 'package:cip_payment_web/app/ui/views/layout/layout_provider.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';

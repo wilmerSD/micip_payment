@@ -1,6 +1,7 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/read_only_field.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/custom_tittle_appbar.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/widgets/leading.dart';
@@ -18,21 +19,21 @@ class PersonalContact extends StatelessWidget {
     final person = authProvider.currentPerson;
     
     /* 📌 Input de colegiado */
-    Widget inputAddress = DisplayText(
-      helperText: 'Dirección',
-      text: person?.address ?? '',
+    Widget inputAddress = ReadOnlyField(
+      label: 'Dirección',
+      value: person?.address ?? '',
     );
 
     /* 📌 Input de dni */
-    Widget inputPhoneNumber = DisplayText(
-      helperText: 'Celular',
-      text: person?.numberPhone ?? '',
+    Widget inputPhoneNumber = ReadOnlyField(
+      label: 'Celular',
+      value: person?.numberPhone ?? '',
     );
    
     /* 📌 Input de dni */
-    Widget inputEmail = DisplayText(
-      helperText: 'Correo electrónico',
-      text: person?.emailMain ?? '',
+    Widget inputEmail = ReadOnlyField(
+      label: 'Correo electrónico',
+      value: person?.emailMain ?? '',
     );
 
  

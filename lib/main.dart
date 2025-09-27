@@ -13,11 +13,12 @@ import 'package:cip_payment_web/app/ui/views/recoverpass/recoverpass_provider.da
 import 'package:cip_payment_web/app/ui/views/splash/splash_provider.dart';
 import 'package:cip_payment_web/core/config/theme_app.dart';
 import 'package:cip_payment_web/firebase_options.dart';
-import 'package:cip_payment_web/preferences/shared_preferences.dart';
-import 'package:cip_payment_web/preferences/theme_provider.dart';
+import 'package:cip_payment_web/core/preferences/shared_preferences.dart';
+import 'package:cip_payment_web/core/preferences/theme_provider.dart';
 import 'package:cip_payment_web/routes/go_router_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -32,8 +33,12 @@ void main() async {
   );
   await PreferencesUser.init();
   await initializeDateFormatting("ES", null);
+  await dotenv.load(fileName: '.env');
+  
+
   // final authProvider = AuthProvider();
   // await authProvider.loadPerson();
+
   
   runApp(
     MultiProvider(

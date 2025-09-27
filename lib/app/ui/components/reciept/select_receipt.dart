@@ -24,26 +24,26 @@ class SelectReceipt extends StatelessWidget {
     Widget btnPay = BtnPrimaryInk(
       text: mainText,
       onTap: () {
-        // showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return PopupGeneral(
-        //       onTapButton: () => {},
-        //       title: textPopUp,
-        //       content: content,
-        //     );
-        //               // return isIos
-        //               //     ? CupertinoAlertDialogComp(
-        //               //         tittle: '¿Estás seguro(a) de cerrar sesión?',
-        //               //         onTapButton: () =>
-        //               //             Helpers.goToLoginRemoveUntil(context),
-        //               //       )
-        //               //     : AlertDialogComponent(
-        //               //         onTapButton: () => {},
-        //               //         title: "¿Estás seguro(a) de cerrar sesión?");
-        //   },
-        // );
-        //       // CheckoutMonthlyfees
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return PopupGeneral(
+              onTapButton: () => {},
+              title: textPopUp,
+              content: content,
+            );
+                      // return isIos
+                      //     ? CupertinoAlertDialogComp(
+                      //         tittle: '¿Estás seguro(a) de cerrar sesión?',
+                      //         onTapButton: () =>
+                      //             Helpers.goToLoginRemoveUntil(context),
+                      //       )
+                      //     : AlertDialogComponent(
+                      //         onTapButton: () => {},
+                      //         title: "¿Estás seguro(a) de cerrar sesión?");
+          },
+        );
+              // CheckoutMonthlyfees
         // monthlyfeesController.createToken(
 
         // );

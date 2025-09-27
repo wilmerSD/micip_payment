@@ -104,7 +104,7 @@ final GoRouter appRouter = GoRouter(
     ),
 
     //Vista de pago realizado
-    GoRoute(
+  /*   GoRoute(
       path: AppRoutesName.PAYMENTGOOD,
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
@@ -124,7 +124,7 @@ final GoRouter appRouter = GoRouter(
         final String detailError = extra?['detailError'] as String? ?? '';
         return PaymentBad(operationId, dateTime, detailError);
       },
-    ),
+    ), */
 
     // GoRoute(
     //   path: '/profile/:id',

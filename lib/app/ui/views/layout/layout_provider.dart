@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cip_payment_web/app/models/response_menu_model.dart';
+import 'package:cip_payment_web/infrastructure/models/response_menu_model.dart';
 import 'package:cip_payment_web/app/ui/views/dashboard/dashboard_view.dart';
 import 'package:cip_payment_web/app/ui/views/layout/routeDataTemporary.dart';
 import 'package:cip_payment_web/app/ui/views/layout/widgets/page_found.dart';

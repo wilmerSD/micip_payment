@@ -1,5 +1,5 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/field_form.dart';
+import 'package:cip_payment_web/app/ui/components/fields/field_form.dart';
 import 'package:cip_payment_web/app/ui/views/login/login_provider.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';

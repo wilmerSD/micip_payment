@@ -1,5 +1,6 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
-import 'package:cip_payment_web/app/ui/components/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/display_text.dart';
+import 'package:cip_payment_web/app/ui/components/fields/read_only_field.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/custom_tittle_appbar.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/widgets/leading.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
@@ -15,34 +16,34 @@ class PersonalData extends StatelessWidget {
     final person = authProvider.currentPerson;
 
     /* 📌 Input de colegiado */
-    Widget inputCollege = DisplayText(
-      helperText: 'Colegiado',
-      text: person?.namePerson ?? '',
+    Widget inputCollege = ReadOnlyField(
+      label: 'Colegiado',
+      value: person?.namePerson ?? '',
     );
 
     /* 📌 Input de dni */
-    Widget inputDni = DisplayText(helperText: 'DNI', text: person?.dni ?? '');
+    Widget inputDni = ReadOnlyField(label: 'DNI', value: person?.dni ?? '');
 
     /* 📌 Input de dni */
-    Widget inputAge = DisplayText(
-      helperText: 'Edad',
-      text: authProvider.age.toString(),
+    Widget inputAge = ReadOnlyField(
+      label: 'Edad',
+      value: authProvider.age.toString(),
     );
 
     /* 📌 Input de dni */
-    Widget inputGender = DisplayText(
-      helperText: 'Género',
-      text: person?.genderPerson == 'M' ? 'Masculino' : 'Femenino',
+    Widget inputGender = ReadOnlyField(
+      label: 'Género',
+      value: person?.genderPerson == 'M' ? 'Masculino' : 'Femenino',
     );
 
-    Widget inputCivilState = DisplayText(
-      helperText: 'Estado civil',
-      text: person?.civilStatus ?? '',
+    Widget inputCivilState = ReadOnlyField(
+      label: 'Estado civil',
+      value: person?.civilStatus ?? '',
     );
 
-    Widget inputBirthDate = DisplayText(
-      helperText: 'Fecha de nacimiento',
-      text: authProvider.birthDateFormatted,
+    Widget inputBirthDate = ReadOnlyField(
+      label: 'Fecha de nacimiento',
+      value: authProvider.birthDateFormatted,
     );
 
     return Padding(
