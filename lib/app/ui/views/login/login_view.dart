@@ -65,7 +65,7 @@ class LoginView extends StatelessWidget {
 Widget password(BuildContext context) {
   final loginProvider = Provider.of<LoginProvider>(context);
   return FieldForm(
-    label: "Contraseña",
+    label: "Password",//,
     hintText: "Ingresa tu contraseña",
     privateText: loginProvider.isVisibleIcon,
     suffix: GestureDetector(
