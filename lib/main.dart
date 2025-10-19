@@ -33,7 +33,7 @@ void main() async {
   );
   await PreferencesUser.init();
   await initializeDateFormatting("ES", null);
-  await dotenv.load(fileName: '.env');
+  // await dotenv.load(fileName: '.env');
   
 
   // final authProvider = AuthProvider();
