@@ -7,7 +7,6 @@ class UserMapper {
       userName: userdb.userName ?? '',
       password: userdb.password ?? '',
       stateUser: userdb.stateUser ?? false,
-      personId: userdb.personId,
-     
+      personId: userdb.personId ?? '',
     );
 }

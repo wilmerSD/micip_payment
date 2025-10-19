@@ -84,23 +84,13 @@ class LoginProvider with ChangeNotifier {
         return;
       }
       user = response;
-
-      // String? personId = await authService.loginUser(
-      //   ctrlUserName.text.trim().toLowerCase(),
-      //   ctrlPassword.text.trim(),
-      // );
       isAuthenticating = false;
       if (user.personId == null) 
       {
-        showToastGlobal( context , 2 , "info", "Usuario o contraseña incorrecta.");
+        showToastGlobal(context , 2 , "info", "Usuario o contraseña incorrecta.");
         return;
       }
-      // if (personId == null) {
-      //   showToastGlobal(context, 2, "info", "Usuario o contraseña incorrecta.");
-      //   return;
-      // }
-      final person = await personRepositoryImpl.getPersonById(user.personId!);
-      // final person = await personService.getPersonById(personId);
+      final person = await personRepositoryImpl.getPersonById(user.personId ?? '');
 
       if (person != null) {
         Provider.of<AuthProvider>(context, listen: false).setPerson(person);
@@ -122,6 +112,7 @@ class LoginProvider with ChangeNotifier {
         }
       } 
     } catch (e) {
+      print(e.toString());
     } finally {
       isAuthenticating = false;
     }
