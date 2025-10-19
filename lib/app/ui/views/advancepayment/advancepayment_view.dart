@@ -1,12 +1,8 @@
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/button/btn_secondary.dart';
 import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
-import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
 import 'package:cip_payment_web/app/ui/components/userlayout/user_layout.dart';
 import 'package:cip_payment_web/app/ui/views/advancepayment/advancepayment_provider.dart';
-import 'package:cip_payment_web/app/ui/views/advancepayment/widgets/detail_advance_cuotas.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/custom_data_personal.dart';
-import 'package:cip_payment_web/core/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

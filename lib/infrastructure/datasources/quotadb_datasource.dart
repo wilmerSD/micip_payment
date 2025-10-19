@@ -14,7 +14,7 @@ class QuotadbDatasource extends QuotaDatasource {
       final response = await firestoredb
           .collection('MemberFee')
           .add(course.toFirestore());
-      debugPrint('✅ Curso creada exitosamente');
+      debugPrint('✅ Cuota creada exitosamente');
       if (response.id.isNotEmpty) {
         // 2. Obtener datos recién guardados
         final snapshot = await response.get();

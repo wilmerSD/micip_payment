@@ -26,7 +26,6 @@ class AdvancepaymentProvider with ChangeNotifier{
   TextEditingController ctrlDiscount = TextEditingController(text:'S/. 30');
   TextEditingController ctrlTotal = TextEditingController(text:'S/. 240');
   
-
   double totalToPay = 0;
   double valueOfQuota = 30.0;
 

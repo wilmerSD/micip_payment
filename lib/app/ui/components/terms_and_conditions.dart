@@ -72,7 +72,7 @@ class TermsAndConditions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 10.0,
         children: [
-          SizedBox(height: 10.0),
+          // SizedBox(height: 10.0),
           Center(
             child: Text(
               "CONDICIONES Y POLÍTICAS DE PRIVACIDAD DEL APLICATIVO (MÓVIL - WEB) CIP CD LAMBAYEQUE",

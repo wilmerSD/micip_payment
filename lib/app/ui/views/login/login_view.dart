@@ -17,131 +17,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ya que se está utilizando Provider, no necesitas definirlo de nuevo aquí.
-    final loginController = Provider.of<LoginProvider>(context);
-
-    Widget password = FieldForm(
-      label: "Contraseña",
-      hintText: "Ingresa tu contraseña",
-      privateText: loginController.isVisibleIcon,
-      suffix: GestureDetector(
-        onTap: () {
-          loginController.isVisibleIcon = !loginController.isVisibleIcon;
-          //logincontroller.toggleVisibility(); // Método para cambiar la visibilidad
-        },
-        child: IconButton(
-          onPressed:()=> loginController.isVisibleIcon = !loginController.isVisibleIcon,
-          icon: Icon(
-            loginController.isVisibleIcon
-                ? Icons.visibility
-                : Icons.visibility_off,
-          ),
-        ),
-      ),
-      textEditingController: loginController.ctrlPassword,
-      onEditingComplete: () {
-        FocusScope.of(context).unfocus();
-        // Lógica para validar el formulario
-      },
-    );
-
-    Widget user = FieldForm(
-      label: "Usuario",
-      hintText: "Ingresa tu usuario",
-      textInputType: TextInputType.emailAddress,
-      textEditingController: loginController.ctrlUserName,
-    );
-    Widget button = BtnPrimaryInk(
-      loading: loginController.isAuthenticating,
-      text: loginController.isAuthenticating ? 'Ingresando' : 'Ingresar',
-      onTap: () {
-        // loginController. getLogin(context);
-        loginController.authentication(context);
-      },
-      /*onTap: () =>  controller.validateForm(context) */
-    );
-
-    Widget forgotPassword = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '¿Olvidaste tu contraseña?',
-          style: AppTextStyle(context).bold13(
-            color: AppColors.quaternaryConst,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            context.go(AppRoutesName.RECOVERPASS);
-          },
-          child: Text(
-            ' Recuperar aquí',
-            style: AppTextStyle(context).bold13(color: AppColors.primaryConst),
-          ),
-        ),
-      ],
-    );
-
-    //¿Preguntar por los terminos y condiciones vienen de algun servicio o se pone directo en el codigo ?
-    Widget termsAndCoditions = InkWell(
-      onTap: () => showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return PopupGeneral(
-            scrollable: true,
-            onTapButton: () => {},
-            title: "",
-            content: TermsAndConditions(),
-          );
-        },
-      ),
-
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Al continuar, aceptas nuestros ',
-              style: AppTextStyle(
-                context,
-              ).bold10(color: AppColors.quaternaryConst),
-            ),
-            TextSpan(
-              text: 'Términos y Condiciones',
-              style: AppTextStyle(
-                context,
-              ).bold10(color: AppColors.granateConst),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    Widget rememberPass = InkWell(
-      onTap: () => loginController.rememberPass = !loginController.rememberPass,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Checkbox(
-            side: const BorderSide(color: AppColors.quaternaryConst),
-            activeColor: AppColors.primaryConst,
-            value: loginController.rememberPass,
-            onChanged: (_) {
-              loginController.rememberPass = !loginController.rememberPass;
-            },
-          ),
-          Text(
-            "Recordar datos",
-            style: AppTextStyle(context).bold14(
-              color: AppColors.quaternaryConst,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ],
-      ),
-    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundColor(context),
@@ -162,22 +37,22 @@ class LoginView extends StatelessWidget {
                       children: [
                         const Center(child: Logo()),
                         // const SizedBox(height: 30.0),
-                        user,
+                        user(context),
                         // const SizedBox(height: 30.0),
-                        password,
+                        password(context),
                         // const SizedBox(height: 15.0),
-                        rememberPass,
+                        rememberPass(context),
                         // const SizedBox(height: 15.0),
                         // Spacer(),
-                        button,
+                        button(context),
                         const SizedBox(height: 10.0),
-                        Center(child: forgotPassword),
+                        Center(child: forgotPassword(context)),
                       ],
                     ),
                   ),
                 ),
                 Spacer(),
-                termsAndCoditions,
+                termsAndCoditions(context),
               ],
             ),
           ),
@@ -185,4 +60,142 @@ class LoginView extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget password(BuildContext context) {
+  final loginProvider = Provider.of<LoginProvider>(context);
+  return FieldForm(
+    label: "Contraseña",
+    hintText: "Ingresa tu contraseña",
+    privateText: loginProvider.isVisibleIcon,
+    suffix: GestureDetector(
+      onTap: () {
+        loginProvider.isVisibleIcon = !loginProvider.isVisibleIcon;
+        //loginProvider.toggleVisibility(); // Método para cambiar la visibilidad
+      },
+      child: IconButton(
+        onPressed: () =>
+            loginProvider.isVisibleIcon = !loginProvider.isVisibleIcon,
+        icon: Icon(
+          loginProvider.isVisibleIcon
+              ? Icons.visibility
+              : Icons.visibility_off,
+        ),
+      ),
+    ),
+    textEditingController: loginProvider.ctrlPassword,
+    onEditingComplete: () {
+      FocusScope.of(context).unfocus();
+      // Lógica para validar el formulario
+    },
+  );
+}
+
+Widget user(BuildContext context){
+final loginProvider = Provider.of<LoginProvider>(context);
+return FieldForm(
+  label: "Usuario",
+  hintText: "Ingresa tu usuario",
+  textInputType: TextInputType.emailAddress,
+  textEditingController: loginProvider.ctrlUserName,
+);
+}
+
+Widget button(BuildContext context){
+final loginProvider = Provider.of<LoginProvider>(context);
+return BtnPrimaryInk(
+  loading: loginProvider.isAuthenticating,
+  text: loginProvider.isAuthenticating ? 'Ingresando' : 'Ingresar',
+  onTap: () {
+    // loginProvider. getLogin(context);
+    loginProvider.authentication(context);
+  },
+  /*onTap: () =>  controller.validateForm(context) */
+);
+}
+
+Widget forgotPassword(BuildContext context){
+
+ return Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Text(
+      '¿Olvidaste tu contraseña?',
+      style: AppTextStyle(
+        context,
+      ).bold13(color: AppColors.quaternaryConst, fontWeight: FontWeight.w500),
+    ),
+    InkWell(
+      onTap: () {
+        context.go(AppRoutesName.RECOVERPASS);
+      },
+      child: Text(
+        ' Recuperar aquí',
+        style: AppTextStyle(context).bold13(color: AppColors.primaryConst),
+      ),
+    ),
+  ],
+);
+}
+
+//¿Preguntar por los terminos y condiciones vienen de algun servicio o se pone directo en el codigo ?
+Widget termsAndCoditions(BuildContext context){
+
+return InkWell(
+  onTap: () => showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return PopupGeneral(
+        scrollable: true,
+        onTapButton: () => {},
+        title: "",
+        content: TermsAndConditions(),
+      );
+    },
+  ),
+
+  child: RichText(
+    text: TextSpan(
+      children: [
+        TextSpan(
+          text: 'Al continuar, aceptas nuestros ',
+          style: AppTextStyle(context).bold10(color: AppColors.quaternaryConst),
+        ),
+        TextSpan(
+          text: 'Términos y Condiciones',
+          style: AppTextStyle(context).bold10(color: AppColors.granateConst),
+        ),
+      ],
+    ),
+  ),
+);
+}
+
+Widget rememberPass(BuildContext context) {
+  final loginProvider = Provider.of<LoginProvider>(context);
+  return InkWell(
+  onTap: () => loginProvider.rememberPass = !loginProvider.rememberPass,
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Checkbox(
+        side: const BorderSide(color: AppColors.quaternaryConst),
+        activeColor: AppColors.primaryConst,
+        value: loginProvider.rememberPass,
+        onChanged: (_) {
+          loginProvider.rememberPass = !loginProvider.rememberPass;
+        },
+      ),
+      Text(
+        "Recordar datos",
+        style: AppTextStyle(context).bold14(
+          color: AppColors.quaternaryConst,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+    ],
+  ),
+);
 }

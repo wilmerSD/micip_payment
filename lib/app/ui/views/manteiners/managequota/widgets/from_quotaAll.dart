@@ -96,7 +96,7 @@ Widget customInfoQuotas(
           onEditingComplete: () {
             FocusScope.of(context).unfocus();
           },
-          initialValue: '30',
+          initialValue: '20',
           inputFormats: [FilteringTextInputFormatter.digitsOnly],
         ),
       ),

@@ -26,6 +26,7 @@ class CertificateSkillProvider with ChangeNotifier {
 
   bool isGetQuotasPending = false;
   bool haveQuotasPending = true;
+  
   Future<void> onInit(BuildContext context) async {
     final personId = PreferencesUser.personId;
     try {

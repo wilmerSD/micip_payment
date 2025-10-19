@@ -1,10 +1,6 @@
-import 'package:cip_payment_web/app/ui/views/home/footer/footer_mobile.dart';
-import 'package:cip_payment_web/app/ui/views/home/footer/footer_tablet.dart';
 import 'package:cip_payment_web/app/ui/views/home/home_provider.dart';
-import 'package:cip_payment_web/app/ui/views/home/widgets/drawer_menu_app.dart';
 import 'package:cip_payment_web/app/ui/views/home/widgets/option_type_pay.dart';
 import 'package:cip_payment_web/core/helpers/constant.dart';
-import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/routes/app_routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

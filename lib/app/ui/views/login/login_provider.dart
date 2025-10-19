@@ -6,7 +6,6 @@ import "package:cip_payment_web/infrastructure/datasources/persondb_datasource.d
 import "package:cip_payment_web/infrastructure/repositories/auth_repository_impl.dart";
 import "package:cip_payment_web/infrastructure/repositories/person_repository_impl.dart";
 import "package:cip_payment_web/routes/app_routes_name.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:provider/provider.dart";
@@ -113,18 +112,15 @@ class LoginProvider with ChangeNotifier {
           context,
           listen: false,
         ).setEntryDate(person.dataEntryPerson);
-      }
-      if (kIsWeb) {
-        if (person?.isAdmin == true) {
+      
+        if (person.isAdmin == true) {
           context.go(AppRoutesName.LAYOUT);
           // web.window.history.replaceState(null, 'Home', '#/home');
         } else {
           context.go(AppRoutesName.HOME);
           web.window.history.replaceState(null, 'Home', '#/home');
         }
-      } else {
-        context.go(AppRoutesName.HOME);
-      }
+      } 
     } catch (e) {
     } finally {
       isAuthenticating = false;
