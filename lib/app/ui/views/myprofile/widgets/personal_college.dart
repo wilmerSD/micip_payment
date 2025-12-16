@@ -1,10 +1,10 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/fields/display_text.dart';
 import 'package:cip_payment_web/app/ui/components/fields/read_only_field.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/data_table_college.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
+import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +74,7 @@ class PersonalCollege extends StatelessWidget {
     );
 
     return Responsive.isMobile(context)
-        ? Scaffold(backgroundColor: Colors.transparent, body: content)
+        ? Scaffold(backgroundColor: AppColors.backgroundColor(context), body: content)
         : content;
   }
 }

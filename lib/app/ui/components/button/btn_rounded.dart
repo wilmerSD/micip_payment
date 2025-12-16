@@ -16,13 +16,22 @@ const BtnRounded(
   @override
   Widget build(BuildContext context){
     return InkWell(
+      borderRadius: BorderRadius.circular(20),
     onTap: () => onTap(),
     child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(width: 1, color: AppColors.primaryConst)),
-      child: Row(
+      child:
+      icon == null
+      ? Text(
+                text,
+                style:
+                    AppTextStyle(context).bold14(color: AppColors.primaryConst),
+              )
+            :
+       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 10.0,
         children: [

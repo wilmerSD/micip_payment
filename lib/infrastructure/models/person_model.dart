@@ -70,10 +70,11 @@ class PersonModel {
       numberCip: data['numberCip'] ?? '',
       numberPhone: data['numberPhone'] ?? '',
       paternalSurname: data['paternalSurname'] ?? '',
-      personId: data['personId'] ?? '',
+      personId: data['personId'] ?? 'en mapa',
       ruc: data['ruc'] ?? '',
       statePerson: data['statePerson'] ?? false,
       isAdmin: data['isAdmin'] ?? false,
+      specialityId: data['specialityId'],
     );
   }
 
@@ -96,9 +97,9 @@ class PersonModel {
         "personId": personId,
         "ruc": ruc,
         "specialityId": specialityId,
-        "stateCollegiate": stateCollegiate,
+        // "stateCollegiate": stateCollegiate,
         "statePerson": statePerson,
-        "typePersonId": typePersonId,
+        // "typePersonId": typePersonId,
         "isAdmin": isAdmin,
       };
   

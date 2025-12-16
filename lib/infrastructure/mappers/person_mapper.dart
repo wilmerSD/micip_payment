@@ -19,9 +19,10 @@ class PersonMapper {
     numberCip: persondb.numberCip,
     numberPhone: persondb.numberPhone,
     paternalSurname: persondb.paternalSurname,
-    personId: persondb.personId,
+    personId: persondb.personId ?? 'aqui en mapa',
     ruc: persondb.ruc,
     statePerson: persondb.statePerson,
-    isAdmin: persondb.isAdmin
+    isAdmin: persondb.isAdmin,
+    specialityId: persondb.specialityId,
   );
 }

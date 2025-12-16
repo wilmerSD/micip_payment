@@ -1,3 +1,4 @@
+import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/infrastructure/models/response_menu_model.dart';
 import 'package:cip_payment_web/app/ui/components/alert/alert_dialog_component.dart';
 import 'package:cip_payment_web/app/ui/views/layout/layout_provider.dart';
@@ -151,7 +152,10 @@ class DrawerMenu extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialogComponent(
-                      onTapButton: () => context.go(AppRoutesName.LOGIN),
+                      onTapButton: () {
+                        Provider.of<AuthProvider>(context, listen: false).logout();
+                        context.go(AppRoutesName.LOGIN);
+                        },
                       title: "¿Seguro que quieres salir de MiCip?",
                     );
                   },

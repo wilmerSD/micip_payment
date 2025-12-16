@@ -11,9 +11,8 @@ class QuotadbDatasource extends QuotaDatasource {
   @override
   Future<Quota?> createQuota(QuotaModel course) async {
     try {
-      final response = await firestoredb
-          .collection('MemberFee')
-          .add(course.toFirestore());
+      final response =
+          await firestoredb.collection('MemberFee').add(course.toFirestore());
       debugPrint('✅ Cuota creada exitosamente');
       if (response.id.isNotEmpty) {
         // 2. Obtener datos recién guardados
@@ -27,7 +26,41 @@ class QuotadbDatasource extends QuotaDatasource {
       }
       return null;
     } catch (e) {
-      debugPrint('❌ Error al crear persona: $e');
+      debugPrint('❌ Error al crear cuota: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Quota>?> createQuotasByPerson(List<QuotaModel> quotas) async {
+    try {
+      final List<Quota> createdQuotas = [];
+
+      // Recorremos cada cuota y la guardamos en la colección
+      for (final quotaModel in quotas) {
+        // 1️⃣ Crear el documento
+        final docRef = await firestoredb
+            .collection('MemberFee')
+            .add(quotaModel.toFirestore());
+
+        // 2️⃣ Actualizar el campo 'id' con el ID generado por Firestore
+        await docRef.update({'id': docRef.id});
+
+        // 3️⃣ Obtener el documento ya actualizado
+        final snapshot = await docRef.get();
+        final data = snapshot.data() as Map<String, dynamic>;
+
+        // 4️⃣ Mapear modelo y entidad
+        final quotaResponse = QuotaModel.fromFirestore(data);
+        final quota = QuotaMapper.quotaResponseToEntity(quotaResponse);
+
+        createdQuotas.add(quota);
+      }
+
+      debugPrint('✅ ${createdQuotas.length} cuotas creadas exitosamente');
+      return createdQuotas;
+    } catch (e) {
+      debugPrint('❌ Error al crear cuotas: $e');
       return null;
     }
   }
@@ -57,6 +90,38 @@ class QuotadbDatasource extends QuotaDatasource {
   }
 
   @override
+  Future<Quota?> fetchLastQuotaByPerson(String personId) async {
+    try {
+      final snapshot = await firestoredb
+          .collection('MemberFee')
+          .where('personId', isEqualTo: personId)
+          .where('status', isEqualTo: 'completed')
+          // ordenamos primero por año, luego por mes, ambos descendentes
+          .orderBy('feeYear', descending: true)
+          .orderBy('feeMonth', descending: true)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        debugPrint(
+            '⚠️ No se encontraron cuotas completadas para esta persona.');
+        return null;
+      }
+
+      final data = snapshot.docs.first.data();
+      final quotaModel = QuotaModel.fromFirestore(data);
+      final quota = QuotaMapper.quotaResponseToEntity(quotaModel);
+
+      debugPrint(
+          '✅ Última cuota encontrada: ${quota.feeMonth}/${quota.feeYear}');
+      return quota;
+    } catch (e) {
+      debugPrint('❌ Error al obtener la última cuota de la persona: $e');
+      return null;
+    }
+  }
+
+  @override
   Future<List<Quota>> updateQuotas(List<QuotaModel> quotasToPay) async {
     try {
       final List<Quota> updatedQuotas = [];
@@ -69,15 +134,12 @@ class QuotadbDatasource extends QuotaDatasource {
 
         // Actualizamos el documento existente en Firestore
         await firestoredb.collection('MemberFee').doc(quotaModel.id).update({
-          ...quotaModel.toFirestore(),
-          "status": "completed", // Aquí forzamos el cambio de estado
+          "status": "completed",
         });
 
         // Obtenemos el documento actualizado
-        final snapshot = await firestoredb
-            .collection('MemberFee')
-            .doc(quotaModel.id)
-            .get();
+        final snapshot =
+            await firestoredb.collection('MemberFee').doc(quotaModel.id).get();
 
         if (snapshot.exists) {
           final data = snapshot.data() as Map<String, dynamic>;
@@ -133,8 +195,7 @@ class QuotadbDatasource extends QuotaDatasource {
           batch.set(quotaRef, {
             "id": quotaRef.id,
             "personId": personId,
-            "fullNamePerson":
-                personData["namePerson"] +
+            "fullNamePerson": personData["namePerson"] +
                 ' ' +
                 personData["paternalSurname"] +
                 personData["motherSurname"],
@@ -184,6 +245,7 @@ class QuotadbDatasource extends QuotaDatasource {
       final snapshot = await firestoredb
           .collection('MemberFee')
           .where('personId', isEqualTo: personId)
+          .where("status", isEqualTo: 'pending')
           .limit(1)
           .get();
 
@@ -196,33 +258,9 @@ class QuotadbDatasource extends QuotaDatasource {
   }
 
   @override
-  Future<List<Quota>> historyPaymentQuotas(String personId) async {
-    try {
-      final snapshot = await firestoredb
-          .collection('PaymentsGenerated')
-          .where('personId', isEqualTo: personId)
-          .get();
-
-      final quotasResponse = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return QuotaModel.fromFirestore(data);
-      }).toList();
-      final quotas = quotasResponse
-          .map((resp) => QuotaMapper.quotaResponseToEntity(resp))
-          .toList();
-      return quotas;
-    } catch (e) {
-      debugPrint("Error al obtener las cuotas pendientes de la persona : $e");
-      return [];
-    }
-  }
-
-  @override
   Future<List<Quota>> fetchAllQuotas() async {
     try {
-      final snapshot = await firestoredb
-          .collection('MemberFee')
-          .get();
+      final snapshot = await firestoredb.collection('MemberFee').get();
       final quotasResponse = snapshot.docs.map((doc) {
         final data = doc.data();
         return QuotaModel.fromFirestore(data);

@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cip_payment_web/app/providers/infodevice_provider.dart';
 import 'package:cip_payment_web/app/ui/components/alert/popup_general.dart';
 import 'package:cip_payment_web/app/ui/views/views.dart';
+import 'package:cip_payment_web/domain/entities/deviceinfo.dart';
+import 'package:cip_payment_web/domain/entities/enums.dart';
+import 'package:cip_payment_web/domain/entities/payment.dart';
 import 'package:cip_payment_web/domain/entities/quota.dart';
 import 'package:cip_payment_web/domain/entities/token.dart';
+import 'package:cip_payment_web/infrastructure/datasources/logdb_datasource.dart';
 import 'package:cip_payment_web/infrastructure/datasources/paymentdb_datasource.dart';
 import 'package:cip_payment_web/infrastructure/datasources/quotadb_datasource.dart';
 import 'package:cip_payment_web/app/ui/components/toast/toast.dart';
@@ -15,12 +20,15 @@ import 'package:cip_payment_web/core/helpers/custom_snackbar.dart';
 import 'package:cip_payment_web/core/helpers/generate_receipt.dart';
 import 'package:cip_payment_web/core/helpers/helpers.dart';
 import 'package:cip_payment_web/core/preferences/shared_preferences.dart';
+import 'package:cip_payment_web/infrastructure/models/logtime_model.dart';
 import 'package:cip_payment_web/infrastructure/models/quota_model.dart';
-import 'package:cip_payment_web/infrastructure/models/response/payment_quota_model.dart';
+import 'package:cip_payment_web/infrastructure/models/response/payment_model.dart';
+import 'package:cip_payment_web/infrastructure/repositories/log_repository_impl.dart';
 import 'package:cip_payment_web/infrastructure/repositories/payment_repository_impl.dart';
 import 'package:cip_payment_web/infrastructure/repositories/quota_repository_impl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MonthlyfeesProvider with ChangeNotifier {
   final QuotaRepositoryImpl quotaRepositoryImpl = QuotaRepositoryImpl(
@@ -30,19 +38,31 @@ class MonthlyfeesProvider with ChangeNotifier {
     PaymentdbDatasource(),
   );
 
+  final LogRepositoryImpl logRepositoryImpl = LogRepositoryImpl(
+    LogdbDatasource(),
+  );
+
+  Timestamp dtOnEntry = Timestamp.fromDate(DateTime.now());
+
   Future<void> onInit(BuildContext context) async {
     selectTab(0);
     await getDataPerson(context);
-    fetchPendingPay(context);
     // response = await http.get(Uri.parse('https://ifconfig.me/all.json'));
+    getInfoDevice(context);
+    fetchPendingPay(context);
+    await getHistoryPayment(context);
+    dtOnEntry = Timestamp.fromDate(DateTime.now());
   }
 
   Future<void> getDataPerson(BuildContext context) async {
     personId = PreferencesUser.personId;
     mainEmail = PreferencesUser.mainEmail;
-    print(personId);
-    print(mainEmail);
+    // print(personId);
+    // print(mainEmail);
   }
+
+  String rucId = '';
+  int receiptType = 0; //0 boleta, 1: facura
 
   String mainEmail = '';
   String personId = '';
@@ -63,7 +83,7 @@ class MonthlyfeesProvider with ChangeNotifier {
   TextEditingController ctrlEmail = TextEditingController(
     text: 'review@culqi.com',
   );
-  List<Quota> paymentHistoryQuotas = [];
+  List<Payment> paymentHistoryQuotas = [];
   bool isGettinHistory = false;
   double amount = 1000.0;
   Token tokenCreate = Token();
@@ -88,53 +108,6 @@ class MonthlyfeesProvider with ChangeNotifier {
       ); // Enviar este token a tu backend para crear el cargo
     } else {
       // Mostrar error al usuario
-    }
-  }
-
-  //Pagar v1 pagar
-  Future<void> payMonthlyFeesv1(BuildContext context) async {
-    await generateReceipt(
-      receiptNumber: 'prueba',
-      date: '07/09/25',
-      name: 'JOSE WILMER SANCHEZ DIAZ',
-      dni: '70833688',
-      subtotal: 25,
-      igv: 12,
-      total: 280,
-    );
-    debugPrint('tratando de generar recibo');
-    final token = await paymentRepositoryImpl.createTokenCulqi(
-      cardNumber: ctrlCardNumber.text,
-      cvv: ctrlCvv.text,
-      expirationMonth: ctrlExpirationMonth.text,
-      expirationYear: ctrlExpirationYear.text,
-      email: ctrlEmail.text,
-    );
-    if (token != null) {
-      final response = await paymentRepositoryImpl.payCulqi(
-        token.id!,
-        Helpers.toCents(amount),
-        ctrlEmail.text,
-      ); // Enviar este token a tu backend para crear el cargo
-      if (response != null) {
-        //TODO verificar si el pago fue exitoso o no
-        Navigator.pop(context);
-        CustomSnackbar.showSnackBarCustom(
-          context,
-          title: 'Éxito',
-          message: 'El pago se realizo correctamente',
-          type: 3,
-          time: 2,
-        );
-      } else {
-        CustomSnackbar.showSnackBarCustom(
-          context,
-          title: 'Validar',
-          message: 'Ups...Ocurrio un error, intente nuevamente',
-          type: 2,
-          time: 2,
-        );
-      }
     }
   }
 
@@ -266,8 +239,17 @@ class MonthlyfeesProvider with ChangeNotifier {
     paymentHistoryQuotas.clear();
     isGettinHistory = true;
     try {
-      final response = await quotaRepositoryImpl.historyPaymentQuotas(personId);
+      final response = await paymentRepositoryImpl.historyPaymentQuotas(
+        personId,
+        PaymentType.monthlyFees.code,
+      );
+      if (response == null) {
+        return;
+      }
       paymentHistoryQuotas.addAll(response);
+      paymentHistoryQuotas.sort(
+        (a, b) => (b.feeMonth ?? 0).compareTo(a.feeMonth ?? 0),
+      );
     } catch (e) {
       showToastGlobal(context, 1, "error", kmessageErrorGeneral);
       debugPrint(e.toString());
@@ -277,108 +259,203 @@ class MonthlyfeesProvider with ChangeNotifier {
     }
   }
 
-  Future<void> openCheckout(BuildContext context) async {
-    debugPrint(totalSelected.toString());
-    final int amountRound = Helpers.toCents(totalSelected);
-    final token = await CulqiWeb.openCheckout(
-      publicKey: Environment.publicKeyCulqi,
-      amount: amountRound, // en céntimos: 60000 = S/600.00
-      currency: "PEN",
-      email: '',
-    );
-    if (token != null) {
-      showDialog(
-        context: context,
-        barrierDismissible: false, // no permite cerrar tocando afuera
-        builder: (BuildContext context) {
-          return const Center(child: CircularProgressIndicator());
-        },
+  Future<void> openCheckout(BuildContext context, person) async {
+    try {
+      debugPrint(totalSelected.toString());
+      final int amountRound = Helpers.toCents(totalSelected);
+
+      final token = await CulqiWeb.openCheckout(
+        publicKey: Environment.publicKeyCulqi,
+        amount: amountRound, // en céntimos: 60000 = S/600.00
+        currency: "PEN",
+        email: 'review@culqi.com',
       );
 
-      debugPrint(token);
-      final payCompleted = await paymentRepositoryImpl.payCulqi(
-        token,
-        amountRound,
-        mainEmail,
-      );
-      Navigator.of(context).pop(); // cierra el loader
-      if (payCompleted != null) {
-        if (payCompleted.succces) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return PopupGeneral(
-                title: '',
-                onTapButton: () {},
-                scrollable: false,
-                content: PaymentGood(
-                  payCompleted.creationDate ?? 0,
-                  Helpers.formatCustomDate(payCompleted.creationDate),
-                  payCompleted.amount!.toDouble(),
-                  textMonthlyfees,
-                ),
-              );
-            },
-          );
-          List<PaymentQuotaModel> paymentQuotaModels = listQuotas
-              .where((q) => q.isSelected) // 1. Solo las cuotas seleccionadas
-              .map(
-                (q) => PaymentQuotaModel(
-                  creationDatePay: Timestamp.fromDate(DateTime.now()),
-                  deviceInfoPay: '',
-                  ipAddressPay: '',
-                  locationCityPay: '',
-                  locationCountryPay: '',
-                  locationPay: LocationPay(latitude: 0, longitude: 0),
-                  paymentDate: Timestamp.fromDate(DateTime.now()),
-                  paymentState: true,
-                  paymentValue: q.amount,
-                  personId: personId,
-                  platformPayment: '',
-                  quantityPayment: 0,
-                  receiptFormatPay: 0,
-                  receiptTypePay: 0,
-                ),
-              )
-              .toList();
-          await paymentRepositoryImpl.payQuotas(paymentQuotaModels);
+      if (token != null) {
+        showDialog(
+          context: context,
+          barrierDismissible: false, // no permite cerrar tocando afuera
+          builder: (BuildContext context) {
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
 
-          List<QuotaModel> quotaModel = listQuotas
-              .where((q) => q.isSelected) // 1. Solo las cuotas seleccionadas
-              .map(
-                (q) => QuotaModel(
-                  id: q.id ?? '',
-                  personId: q.personId ?? '',
-                  isSelected: q.isSelected,
-                ),
-              )
-              .toList();
-          
-          await quotaRepositoryImpl.updateQuotas(quotaModel);
-          fetchPendingPay(context);
-        } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return PopupGeneral(
-                title: '',
-                onTapButton: () {},
-                scrollable: false,
-                content: PaymentBad(
-                  Helpers.generateRandomOperationNumber(),
-                  Helpers.formatCustomDate(payCompleted.creationDate),
-                  payCompleted.userMessage ?? '',
-                ),
-              );
-            },
-          );
+        debugPrint(token);
+        final payCompleted = await paymentRepositoryImpl.payCulqi(
+          token,
+          amountRound,
+          mainEmail,
+        );
+        Navigator.of(context).pop(); // cierra el loader
+        if (payCompleted != null) {
+          if (payCompleted.succces) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PopupGeneral(
+                  title: '',
+                  onTapButton: () {},
+                  scrollable: false,
+                  content: PaymentGood(
+                    payCompleted.creationDate ?? 0,
+                    totalSelected,
+                    textMonthlyfees,
+                    PaymentType.monthlyFees.code,
+                  ),
+                );
+              },
+            );
+            final payment = PaymentModel(
+              creationDatePay: Timestamp.fromDate(DateTime.now()),
+              deviceInfoPay: deviceInfo?.nameDevice ?? '',
+              ipAddressPay: deviceInfo?.ip ?? '',
+              locationCityPay: deviceInfo?.nameCity ?? '',
+              locationCountryPay: deviceInfo?.nameCountry ?? '',
+              locationPay: GeoPoint(
+                deviceInfo?.latitude ?? 0.0,
+                deviceInfo?.longitude ?? 0,
+              ),
+              paymentState: true,
+              paymentValue: totalSelected,
+              personId: personId,
+              platformPayment: PlatformPayment.app.name,
+              quantityPayment: 1,
+              receiptType: receiptType, //ReceiptType.bill.code,
+              typePay: PaymentType.monthlyFees.code,
+              paymentChannel: PaymentChannel.online.code,
+              rucId: rucId,
+              feeMonth: 0, //ya no aplica porque se sabra de la tabla intermedia
+              feeYear: 0, //ya no aplica porque se sabra de la tabla intermedia
+              specialtyId: '',
+            );
+
+            List<QuotaModel> quotaModel = listQuotas
+                .where((q) => q.isSelected) // 1. Solo las cuotas seleccionadas
+                .map(
+                  (q) => QuotaModel(
+                    id: q.id ?? '',
+                    personId: q.personId ?? '',
+                    isSelected: q.isSelected,
+                  ),
+                )
+                .toList();
+
+            final paymentMade = await paymentRepositoryImpl.payment(payment);
+            await paymentRepositoryImpl.paymentDetail(
+              quotaModel,
+              paymentMade?.id ?? '',
+              PaymentType.monthlyFees.code,
+            );
+            await quotaRepositoryImpl.updateQuotas(quotaModel);
+            fetchPendingPay(context);
+            getHistoryPayment(context);
+
+            final name = person?.namePerson ?? '';
+            final maternalSurname = person?.motherSurname ?? '';
+            final paternalSurname = person?.paternalSurname ?? '';
+            LogtimeModel logTime = LogtimeModel(
+              personId: personId,
+              cip: person?.numberCip ?? '',
+              dni: person?.dni ?? '',
+              fullNames: '$name $maternalSurname $paternalSurname',
+              paymentDateEnd: Timestamp.fromDate(DateTime.now()),
+              paymentDateStart: dtOnEntry,
+              paymentId: paymentMade?.id,
+              typePay: PaymentType.monthlyFees.code,
+              typePayName: PaymentType.monthlyFees.name,
+            );
+            createLog(logTime);
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return PopupGeneral(
+                  title: '',
+                  onTapButton: () {},
+                  scrollable: false,
+                  content: PaymentBad(
+                    Helpers.generateRandomOperationNumber(),
+                    Helpers.formatCustomDate(payCompleted.creationDate),
+                    payCompleted.userMessage ?? '',
+                  ),
+                );
+              },
+            );
+          }
         }
       }
+    } catch (e) {
+      debugPrint('Error in payment process: $e');
+    } finally {
+      cleanVariables();
     }
   }
-  void prueba(){
-    for ( var quota in listQuotas){
-      print(quota.id); 
+
+  void prueba() {
+    for (var quota in listQuotas) {
+      print(quota.id);
     }
+  }
+
+  List<Quota> listQuotasPayment = [];
+  Future<void> getPaymentFeesByPayment(String paymentId) async {
+    // print('getPaymentFeesByPayment');
+    // paymentId = 'QzbIRNyfLXWWfs6p2YB2';
+    listQuotasPayment.clear();
+    try {
+      final response = await paymentRepositoryImpl.getPaymentFeesByPaymentId(
+        paymentId,
+      );
+      print(response.length);
+      listQuotasPayment.addAll(response);
+      listQuotasPayment.sort(
+        (a, b) => (a.feeMonth ?? 0).compareTo(b.feeMonth ?? 0),
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+  }
+
+  void cleanVariables() {
+    rucId = '';
+    receiptType = 0;
+  }
+
+  Future<void> createLog(LogtimeModel logTime) async {
+    try {
+      logRepositoryImpl.createLog(logTime);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+  }
+
+    Future<void> getReceipt(
+    String receiptNumber,
+    String date,
+    String name,
+    String dni,
+    double subtotal,
+  ) async {
+    print(listQuotasPayment.length);
+    final igv = subtotal * 0.18;
+    await generateReceipt(
+      receiptNumber: receiptNumber,
+      date: date,
+      name: name,
+      dni: dni,
+      subtotal: subtotal - igv,
+      igv: igv,
+      total: subtotal,
+      typePay: textMonthlyfees,
+      storepay: listQuotasPayment,
+    );
+  }
+
+  DeviceInfo? deviceInfo;
+  void getInfoDevice(context) async {
+    deviceInfo = await Provider.of<InfodeviceProvider>(
+      context,
+      listen: false,
+    ).deviceInfo();
   }
 }

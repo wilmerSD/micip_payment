@@ -23,10 +23,12 @@ class LoginProvider with ChangeNotifier {
   User user = User();
   int counter = 0;
   TextEditingController ctrlUserName = TextEditingController(
-    text: '',
+    text: 'usuario280@gmail.com'//'wilmer',
   ); //  Jose wilmer123
+  //usuario280@gmail.com
+  //msU9H7CBeXefsQ7aGSef
   TextEditingController ctrlPassword = TextEditingController(
-    text: '',
+    text: 'msU9H7CBeXefsQ7aGSef'// 'wilmer',
   ); // Jose123 wilmer123
   TextEditingController ctrlDni = TextEditingController(text: '12345678');
   TextEditingController ctrlName = TextEditingController(
@@ -62,25 +64,28 @@ class LoginProvider with ChangeNotifier {
   Future<void> authentication(BuildContext context) async {
     isAuthenticating = true;
     try {
+      
       if (ctrlUserName.text.isEmpty && ctrlPassword.text.isEmpty) {
         showToastGlobal(context, 2, "info", "Ingresar usuario y contraseña.");
         return;
       }
+      
       if (ctrlUserName.text.isEmpty) {
         showToastGlobal(context, 2, "info", "Ingresar usuario.");
         return;
       }
+      
       if (ctrlPassword.text.isEmpty) {
         showToastGlobal(context, 2, "info", "Ingresar contraseña.");
         return;
       }
-
+      
       final response = await authRepositoryImpl.loginUser(
         email: ctrlUserName.text.trim().toLowerCase(),
         password: ctrlPassword.text.trim(),
       );
-
       if (response == null) {
+        showToastGlobal(context , 2 , "info", "Usuario o contraseña incorrecta.");
         return;
       }
       user = response;
@@ -90,6 +95,7 @@ class LoginProvider with ChangeNotifier {
         showToastGlobal(context , 2 , "info", "Usuario o contraseña incorrecta.");
         return;
       }
+      print('Iniciando sesion 2...');
       final person = await personRepositoryImpl.getPersonById(user.personId ?? '');
 
       if (person != null) {

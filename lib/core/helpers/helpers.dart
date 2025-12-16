@@ -57,7 +57,8 @@ class Helpers {
     ).join();
   }
 
-  static String getNameMonth(int month) {
+  static String getNameMonth(int? month) {
+    if( month == null ) return '-';
     if (month < 1 || month > 12) return "";
     List<String> months = [
       "Enero",
@@ -176,7 +177,8 @@ class Helpers {
     }
   }
 
-  static String timestampToString(Timestamp timeStamp) {
+  static String timestampToString(Timestamp? timeStamp) {
+    if(timeStamp == null) return '';
     try {
       DateTime date = timeStamp.toDate();
       String formattedDate = DateFormat('yyyy/MM/dd').format(date);
@@ -389,6 +391,16 @@ class Helpers {
     }
   }
 
+  static String formatDateFromTimestamp(Timestamp? timestamp) { //11 de Agosto de 2025
+    if(timestamp == null) return '';
+    DateTime date = timestamp.toDate();
+    final day = date.day;
+    final month = months[date.month - 1];
+    final year = date.year;
+
+    return '$day de $month de $year';
+  }
+
   /* 📌 Validar fecha en formato yyyy/MM/dd  */
   static String? validateDateFormat(String? value) {
     if (value == null || value.isEmpty) {
@@ -497,5 +509,17 @@ class Helpers {
       // Redondear al entero más cercano
       return (soles * 100).round();
     }
+  }
+
+  static String typePay(int? type) {
+    if (type == null) return '';
+    switch (type) {
+      case 0:
+        return 'Boleta';
+      case 1:
+        return 'Factura';
+      default:
+        return 'Desconocido';
+    } 
   }
 }

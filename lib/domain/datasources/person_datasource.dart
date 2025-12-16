@@ -2,7 +2,8 @@ import 'package:cip_payment_web/domain/entities/person.dart';
 import 'package:cip_payment_web/infrastructure/models/person_model.dart';
 
 abstract class PersonDatasource {
-  Future<List<Person>> fetchAllPersons();
+  Future<List<Person>> fetchAllPersons(String mainEmail, String dni, String names);
   Future<Person?> getPersonById(String personId);
   Future<Person?> createPerson(PersonModel person);
+  Future<void> pruebaBuscarEspecialidadPerson(String personId);
 }

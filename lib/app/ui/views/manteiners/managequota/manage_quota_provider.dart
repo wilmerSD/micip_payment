@@ -22,7 +22,7 @@ class ManageQuotaProvider with ChangeNotifier {
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
   DateTime dueDate = DateTime.now();
-  TextEditingController ctrlAmount = TextEditingController(text: '30');
+  TextEditingController ctrlAmount = TextEditingController(text: '20');
   TextEditingController ctrlAge = TextEditingController(
     text: DateFormat.y('es_ES').format(DateTime.now()),
   );
@@ -83,12 +83,12 @@ class ManageQuotaProvider with ChangeNotifier {
   }
 
   Future<void> generateQuotasForAllPersons(BuildContext context) async {
-    amount = int.tryParse(ctrlAmount.toString())?.toDouble() ?? 30.0;
+    amount = int.tryParse(ctrlAmount.toString())?.toDouble() ?? 20.0;
     try {
       /*  final response =  */
       await quotaRepositoryImpl.generateQuotasForEligiblePersons(
         feeMonth: currentMonth.id,
-        feeYear: feeYear,
+        feeYear: int.tryParse(ctrlAge.text) ?? feeYear,
         amount: amount,
       );
       context.pop();

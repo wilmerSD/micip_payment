@@ -1,4 +1,3 @@
-import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
 import 'package:cip_payment_web/app/ui/components/fields/custom_text_field.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +60,7 @@ class CheckoutMonthlyfees extends StatelessWidget {
       },
     );
 
-    Widget btnPay = BtnPrimaryInk(text: 'Pagar S/. 30.0', onTap: () {
-      monthlyfeesController.payMonthlyFeesv1(context);
-      // monthlyfeesController.crearTokenCulqi();
-      
-    });
+
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -79,7 +74,6 @@ class CheckoutMonthlyfees extends StatelessWidget {
           inputExpirationYear,
           inputEmail,
           const Spacer(),
-          btnPay,
           const SizedBox(height: 10,),
         ],
       ),

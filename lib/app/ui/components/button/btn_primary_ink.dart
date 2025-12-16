@@ -29,16 +29,16 @@ class BtnPrimaryInk extends StatelessWidget {
         color: loading ? colorTheme : AppColors.primaryConst,
         // gradient: loading ? AppColors.grayDesactivate: AppColors.primaryGradient,
         borderRadius: BorderRadius.circular(kRadiusMedium),
-        boxShadow: [
-          BoxShadow(
-            color: loading
-                ? AppColors.grayDesactivate
-                : AppColors.red.withValues(),
-            spreadRadius: 0.5,
-            blurRadius: 6,
-            offset: const Offset(0, 0),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: loading
+        //         ? AppColors.grayDesactivate
+        //         : AppColors.red.withValues(),
+        //     spreadRadius: 0.5,
+        //     blurRadius: 6,
+        //     offset: const Offset(0, 0),
+        //   ),
+        // ],
       ),
       child: Material(
         color: Colors.transparent,

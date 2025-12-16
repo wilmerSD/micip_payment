@@ -1,35 +1,24 @@
 import 'package:cip_payment_web/domain/entities/payment.dart';
-import 'package:cip_payment_web/infrastructure/models/culqi/culqi_payment_response.dart';
+import 'package:cip_payment_web/infrastructure/models/response/payment_model.dart';
 
 class PaymentMapper {
-  static Payment? paymentResponseToEntity(CulqiPaymentResponse paymentdb) {
-    if (paymentdb.isSuccess) {
-      final success = paymentdb.success!;
-      return Payment(
-        succces: true,
-        object: success.object ?? '',
-        id: success.id ?? '',
-        creationDate: success.creationDate ?? 0,
-        amount: success.amount ?? 0,
-        amountRefunded: success.amountRefunded ?? 0,
-        currentAmount: success.currentAmount ?? 0,
-      );
-    }
-     if (paymentdb.isError) {
-      final error = paymentdb.error!;
-      // Puedes manejarlo de dos formas:
-      // 1. Devolver null
-      // 2. Lanzar excepción con el mensaje de error
-      // throw Exception(
-      //   "Culqi error: ${error.userMessage ?? error.merchantMessage}",
-      // );
-      return Payment(
-        succces: false,
-        object: error.object ?? '',
-        userMessage: error.userMessage ?? '',
-        merchantMessage: error.merchantMessage ?? ''
-      );
-    }
-    return null;
-  }
+  static Payment storepayResponseToEntity(PaymentModel storepay) =>
+  Payment(
+    id: storepay.id ?? '',
+    creationDatePay: storepay.creationDatePay,
+    locationCityPay: storepay.locationCityPay ?? '',
+    locationCountryPay: storepay.locationCountryPay ?? '',
+    paymentState: storepay.paymentState ?? false,
+    paymentValue: storepay.paymentValue?.toInt() ?? 0,
+    personId: storepay.personId ?? '',
+    platformPayment: storepay.platformPayment ?? '',
+    quantityPayment: storepay.quantityPayment?.toInt() ?? 0,
+    receiptType: storepay.receiptType ?? 0,
+    typePay: storepay.typePay ?? 0,
+    paymentChannel: storepay.paymentChannel ?? 0,
+    rucId: storepay.rucId ?? '',
+    feeMonth: storepay.feeMonth ?? 0,
+    feeYear: storepay.feeYear ?? 0,
+    specialtyId: storepay.specialtyId ?? '',
+  );
 }

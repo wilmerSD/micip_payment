@@ -8,27 +8,37 @@ class InvoicedbDatasource extends InvoiceDatasource {
   final FirebaseFirestore firestoredb = FirebaseFirestore.instance;
 
   @override
+  @override
   Future<Company?> createRuc(CompanyModel newCompany) async {
     try {
-      final response = await firestoredb
-          .collection('Company')
-          .add(newCompany.toJson());
-      if (response.id.isNotEmpty) {
-        // 2. Obtener datos recién guardados
-        final snapshot = await response.get();
+      // 1. Generamos una referencia con id automático
+      final docRef = firestoredb.collection('Company').doc();
+
+      // 2. Guardamos la data + el id generado
+      await docRef.set({
+        ...newCompany.toJson(),
+        "id": docRef.id, // Guardamos el id como campo
+        "createdAt": FieldValue.serverTimestamp(),
+      });
+
+      // 3. Obtenemos el documento recién guardado
+      final snapshot = await docRef.get();
+
+      if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
 
-        // 3. Mapear a Response
+        // 4. Mapear a Response
         final companyResponse = CompanyModel.fromJson(data);
 
-        // 4. Mapear a Entidad
-        final newCompany = CompanyMapper.companyResponseToEntity(
-          companyResponse,
-        );
-        return newCompany;
+        // 5. Mapear a Entidad
+        final createdCompany =
+            CompanyMapper.companyResponseToEntity(companyResponse);
+
+        return createdCompany;
       }
       return null;
     } catch (e) {
+      print("❌ Error al crear RUC: $e");
       return null;
     }
   }
@@ -39,6 +49,7 @@ class InvoicedbDatasource extends InvoiceDatasource {
       final snapshot = await firestoredb
           .collection('Company')
           .where('personId', isEqualTo: personId)
+          .where('status', isEqualTo: true)
           .get();
 
       final companiesResponse = snapshot.docs.map((doc) {
@@ -63,16 +74,14 @@ class InvoicedbDatasource extends InvoiceDatasource {
       // 1. Actualizar documento en Firestore
       await firestoredb.collection('Company').doc(companyUpdate.id).update({
         ...companyUpdate.toJson(), // asumiendo que tienes un método toJson()
-        "status": "completed", // forzamos cambio de estado
+        // "status": "completed", // forzamos cambio de estado
         "updatedAt":
             FieldValue.serverTimestamp(), // opcional, timestamp del servidor
       });
 
       // 2. Obtener documento actualizado
-      final snapshot = await firestoredb
-          .collection('Company')
-          .doc(companyUpdate.id)
-          .get();
+      final snapshot =
+          await firestoredb.collection('Company').doc(companyUpdate.id).get();
 
       if (snapshot.exists) {
         final data = snapshot.data() as Map<String, dynamic>;
@@ -84,6 +93,33 @@ class InvoicedbDatasource extends InvoiceDatasource {
       }
     } catch (e) {
       print("Error al actualizar RUC: $e");
+      return null;
+    }
+  }
+
+  @override
+  Future<Company?> deleteRuc(String companyId) async {
+    try {
+      // 1. Actualizar documento en Firestore (soft delete)
+      await firestoredb.collection('Company').doc(companyId).update({
+        "status": false, // marcamos como eliminado
+        "updatedAt": FieldValue.serverTimestamp(),
+      });
+
+      // 2. Obtener documento actualizado
+      final snapshot =
+          await firestoredb.collection('Company').doc(companyId).get();
+
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        final companyResponse = CompanyModel.fromJson(data);
+        final company = CompanyMapper.companyResponseToEntity(companyResponse);
+        return company;
+      } else {
+        return null; // Documento no existe
+      }
+    } catch (e) {
+      print("❌ Error al eliminar RUC: $e");
       return null;
     }
   }

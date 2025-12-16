@@ -55,7 +55,7 @@ class OptionTypePay extends StatelessWidget {
                       color: colorBackIcon,
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Icon(
-                    Bootstrap.calendar2_check,
+                    icon,
                     color: colorIcon,
                     size: whatPlatformIs == 0 ? 20.0 : whatPlatformIs == 1 ? 40.0 : 40.0,
                   ),

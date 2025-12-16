@@ -38,9 +38,12 @@ class FormCuotaAll extends StatelessWidget {
               SizedBox(
                 height: 45.0,
                 width: 150.0,
-                child: BtnThird(text: 'Guardar', onTap: () {
-                  manageQuotaProvider.generateQuotasForAllPersons(context);
-                }),
+                child: BtnThird(
+                  text: 'Guardar',
+                  onTap: () {
+                    manageQuotaProvider.generateQuotasForAllPersons(context);
+                  },
+                ),
               ),
             ],
           ),
@@ -60,10 +63,14 @@ Widget customInfoQuotas(
     children: [
       Expanded(
         child: CustomTextField(
-          enabledfield: true,
+          maxLength: 4,
+          // enabledfield: true,
           helperText: 'Año',
           textEditingController:
               manageQuotaProvider.ctrlAge, // context.read<manageQuotaProvider>,
+          inputFormats: [
+            FilteringTextInputFormatter.digitsOnly, // ✅ Solo permite números
+          ],
           onEditingComplete: () {
             FocusScope.of(context).unfocus();
           },

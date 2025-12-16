@@ -66,7 +66,7 @@ class CustomTextField extends StatelessWidget {
           style: AppTextStyle(context).semi14(color: AppColors.textQuaternaryBasic(context)),
           obscureText: privateText,
           decoration: InputDecoration(
-            fillColor:AppColors.fillTextColor(context),
+            fillColor: Colors.transparent,
             counterText: "",
             filled: true,
             isDense: true,
@@ -77,19 +77,19 @@ class CustomTextField extends StatelessWidget {
             //floatingLabelBehavior: FloatingLabelBehavior.always,
             suffixIcon: suffix,
             suffixIconColor: AppColors.primaryConst,
-            // floatingLabelStyle: AppTextStyle(context).medium14(
-            //   color: AppColors.grayBlue,
-            // ),
-            // labelStyle: AppTextStyle(context).medium14(
-            //   color: AppColors.grayBlue,
-            // ),
-            // suffixStyle: AppTextStyle(context).medium14(
-            //   color: AppColors.red,
-            // ),
+            floatingLabelStyle: AppTextStyle(context).medium14(
+              color: AppColors.grayBlue,
+            ),
+            labelStyle: AppTextStyle(context).medium14(
+              color: AppColors.grayBlue,
+            ),
+            suffixStyle: AppTextStyle(context).medium14(
+              color: AppColors.red,
+            ),
             hintText: hintText,
-            // hintStyle: AppTextStyle(context).medium14(
-            //   color: const Color.fromARGB(255, 25, 40, 201),
-            // ),
+            hintStyle: AppTextStyle(context).medium14(
+              color: AppColors.grayBlue,
+            ),
             // labelText: label,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(kRadiusExtraLittle),

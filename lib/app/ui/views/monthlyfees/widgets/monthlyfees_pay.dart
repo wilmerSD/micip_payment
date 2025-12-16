@@ -1,5 +1,9 @@
+import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
+import 'package:cip_payment_web/app/ui/components/modal_new_note.dart';
+import 'package:cip_payment_web/app/ui/components/reciept/select_receipt.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
+import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/checkout_monthlyfees.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/widgets/nodebt_view.dart';
 import 'package:cip_payment_web/core/helpers/helpers.dart';
 import 'package:cip_payment_web/core/helpers/responsive.dart';
@@ -85,24 +89,34 @@ class MonthlyfeesPay extends StatelessWidget {
                         loading: provider.totalSelected == 0,
                         text: 'Pagar S/. ${provider.totalSelected}',
                         onTap: () async {
-                          // ModalUtils.getShowModalBS(
-                          //   context,
-                          //   content: SelectReceipt(
-                          //     mainText: 'Pagar S/. ${provider.totalSelected}',
-                          //     textBtn: 'Continuar',
-                          //     textPopUp: 'Pagar cuota mensual',
-                          //     content:  CheckoutMonthlyfees(),
-                          //   ),
-                          //   title: 'Detalle de pago',
-                          // );
-                          context.read<MonthlyfeesProvider>().prueba();
+                          ModalUtils.getShowModalBS(
+                            context,
+                            content: SelectReceipt(
+                              mainText: 'Pagar S/. ${provider.totalSelected}',
+                              textBtn: 'Continuar',
+                              textPopUp: 'Pagar cuota mensual',
+                              content: SizedBox(), //CheckoutMonthlyfees(),
+                              onTap: () {
+                                context
+                                    .read<MonthlyfeesProvider>()
+                                    .openCheckout(
+                                      context,
+                                      context
+                                          .read<AuthProvider>()
+                                          .currentPerson,
+                                    );
+                              },
+                            ),
+                            title: 'Detalle de pago',
+                          );
+                          // context.read<MonthlyfeesProvider>().prueba();
                           // context.read<MonthlyfeesProvider>().openCheckout(context);
                         },
                       );
                     },
                   ),
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
               ],
             ),
     );

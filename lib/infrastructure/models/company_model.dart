@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CompanyModel {
   final String? id;
   final String? address;
   final String? businessName;
-  final DateTime? createdAt;
+  final Timestamp? createdAt;
   final String? email;
   final String? personId;
   final String? phone;
   final String? ruc;
   final bool? status;
   final String? tradeName;
-  final DateTime? updatedAt;
+  final Timestamp? updatedAt;
 
   CompanyModel({
     this.id,
@@ -29,31 +31,27 @@ class CompanyModel {
     id: json["id"],
     address: json["address"],
     businessName: json["businessName"],
-    createdAt: json["createdAt"] == null
-        ? null
-        : DateTime.parse(json["createdAt"]),
+    createdAt: json["createdAt"],
     email: json["email"],
     personId: json["personId"],
     phone: json["phone"],
     ruc: json["ruc"],
     status: json["status"],
     tradeName: json["tradeName"],
-    updatedAt: json["updatedAt"] == null
-        ? null
-        : DateTime.parse(json["updatedAt"]),
+    updatedAt: json["updatedAt"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "address": address,
     "businessName": businessName,
-    "createdAt": createdAt?.toIso8601String(),
+    "createdAt": createdAt,
     "email": email,
     "personId": personId,
     "phone": phone,
     "ruc": ruc,
     "status": status,
     "tradeName": tradeName,
-    "updatedAt": updatedAt?.toIso8601String(),
+    "updatedAt": updatedAt,
   };
 }

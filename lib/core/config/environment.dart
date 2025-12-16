@@ -6,8 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 //   static String publicKeyCulqi = dotenv.env['PUBLIC_KEY_QA'] ?? 'No hay api key';
 
 
-// }
+}
 
+
+// Para cuando suba a producción
 class Environment {
   static String publicKeyCulqi = const String.fromEnvironment(
     'PUBLIC_KEY_QA',

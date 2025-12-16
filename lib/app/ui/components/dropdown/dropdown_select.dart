@@ -1,3 +1,4 @@
+import 'package:cip_payment_web/core/helpers/constant.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:cip_payment_web/core/theme/app_text_style.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -7,6 +8,7 @@ class Select extends StatelessWidget {
   const Select(
       {super.key,
       this.label,
+      this.labelInside,
       this.hint,
       this.items,
       this.onChanged,
@@ -23,6 +25,7 @@ class Select extends StatelessWidget {
       this.hintText,
       this.isPadLeft});
   final String? label;
+  final String? labelInside;
   final String? hint;
   final void Function(Object?)? onChanged;
   final List<DropdownMenuItem<Object>>? items;
@@ -40,62 +43,97 @@ class Select extends StatelessWidget {
   final List<Widget> Function(BuildContext)? selectedItemBuilder;
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonHideUnderline(
-      child: DropdownButtonFormField2(
-        value: value,
-        autofocus: false,
-        isExpanded: true,
-        selectedItemBuilder: selectedItemBuilder,
-        hint: Text(hint ?? "Seleccione",
-            style: AppTextStyle(context).regular14(
-                color:
-                    isActive ? AppColors.inputcolors : AppColors.inputcolors)),
-        decoration: InputDecoration(
-            hintText: hintText,
-            border: const OutlineInputBorder(
-              
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        label != null
+            ? Column(
+                children: [
+                  Text(
+                    label!,
+                    style: AppTextStyle(context).bold14(
+                      color: AppColors.textBasic(context),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4)
+                ],
+              )
+            : const SizedBox(),
+        DropdownButtonHideUnderline(
+          child: DropdownButtonFormField2(
+            value: value,
+            autofocus: false,
+            isExpanded: true,
+            selectedItemBuilder: selectedItemBuilder,
+            hint: Text(hint ?? "Seleccione",
+                style: AppTextStyle(context).regular14(
+                    color: isActive
+                        ? AppColors.textBasic(context)
+                        : AppColors.textBasic(context))),
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: const OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(kRadiusExtraLittle),
+                borderSide: const BorderSide(
+                  width: 1.0,
+                  color: AppColors.grayLight,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 12.0), //const EdgeInsets.symmetric(vertical: 7.0),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              label: Text(labelInside ?? "",
+                  style: TextStyle(
+                      fontSize: 14, color: AppColors.textBasic(context))),
+              enabled: true,
+              filled: false,
+              isDense: true,
+              // fillColor: Colors.transparent,
             ),
-            contentPadding:  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0), //const EdgeInsets.symmetric(vertical: 7.0),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            label: Text(label ?? "",
-                style:
-                    const TextStyle(fontSize: 14, color: AppColors.grayBlue)),
-            enabled: true,
-            filled: false,
-            isDense: true,
-            // fillColor: Colors.transparent,
+            items: items,
+            validator: validator,
+            autovalidateMode:
+                autoValidate ?? AutovalidateMode.onUserInteraction,
+            onChanged: onChanged,
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: height ?? 200.0,
+              useSafeArea: false,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.backgroundColor(context),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.shadowAppBarColor(context),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: const Offset(0, 0), // changes position of shadow
+                    ),
+                  ]),
+              offset: const Offset(0, 20),
+              scrollbarTheme: ScrollbarThemeData(
+                radius: const Radius.circular(40),
+                thickness: WidgetStateProperty.all<double>(6),
+                thumbVisibility: WidgetStateProperty.all<bool>(true),
+              ),
             ),
-        items: items,
-        validator: validator,
-        autovalidateMode: autoValidate ?? AutovalidateMode.onUserInteraction,
-        onChanged: onChanged,
-        dropdownStyleData: DropdownStyleData(
-          maxHeight: height ?? 200.0,
-          useSafeArea: false,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: Colors.white,
-          ),
-          offset: const Offset(0, 20),
-          scrollbarTheme: ScrollbarThemeData(
-            radius: const Radius.circular(40),
-            thickness: WidgetStateProperty.all<double>(6),
-            thumbVisibility: WidgetStateProperty.all<bool>(true),
+            buttonStyleData: const ButtonStyleData(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+            ),
+            menuItemStyleData: MenuItemStyleData(
+              height: 40,
+              padding: EdgeInsets.only(left: isPadLeft ?? 14.0, right: 0),
+            ),
+            // onTap: onTap
           ),
         ),
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-        ),
-        menuItemStyleData: MenuItemStyleData(
-          height: 40,
-          padding: EdgeInsets.only(left: isPadLeft ?? 14.0, right: 0),
-        ),
-        // onTap: onTap
-      ),
+      ],
     );
   }
 }

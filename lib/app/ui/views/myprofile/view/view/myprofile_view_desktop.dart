@@ -1,3 +1,4 @@
+import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/alert/alert_dialog_component.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/widgets/container_options.dart';
@@ -204,7 +205,10 @@ Widget closeSesion(BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialogComponent(
-          onTapButton: () => context.go(AppRoutesName.LOGIN),
+          onTapButton: () {
+            Provider.of<AuthProvider>(context, listen: false).logout();
+            context.go(AppRoutesName.LOGIN);
+            },
           title: "¿Seguro que quieres salir de MiCip?",
         );
       },

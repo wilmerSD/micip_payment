@@ -55,9 +55,7 @@ class TablePersons extends StatelessWidget {
                       ),
                     ),
                     CustomCell(
-                      item.namePerson +
-                          item.paternalSurname +
-                          item.motherSurname,
+                      '${item.namePerson} ${item.paternalSurname} ${item.motherSurname}',
                       context,
                     ),
                     CustomCell(item.dni, context),
@@ -66,7 +64,7 @@ class TablePersons extends StatelessWidget {
                       context,
                     ),
                     CustomCell(item.emailMain, context),
-                    CustomCell(item.numberCip, context),
+                    CustomCell(item.id, context),
                     CustomCell(
                       '',
                       context,
@@ -79,11 +77,12 @@ class TablePersons extends StatelessWidget {
                       isText: false,
                       child: IconWrapper(
                         onTap: () {
+                          provider.toEditPerson(item);
                           showDialog(
                             context: context,
                             builder: (context) {
                               return PopupGeneral(
-                                title: 'Ingresar persona',
+                                title: 'Editar persona',
                                 onTapButton: () {},
                                 scrollable: true,
                                 content: FormPerson(personProvider: provider),

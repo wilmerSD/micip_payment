@@ -7,6 +7,7 @@ import 'package:cip_payment_web/app/ui/views/manteiners/person/table_persons.dar
 import 'package:cip_payment_web/app/ui/views/manteiners/person/widgets/form_person.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class PersonView extends StatelessWidget {
@@ -17,7 +18,7 @@ class PersonView extends StatelessWidget {
 
     // Se ejecuta solo una vez cuando se construye el widget
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      personProvider.getAllPerson();
+      personProvider.onInit();
     });
 
     return Consumer<PersonProvider>(
@@ -34,6 +35,7 @@ class PersonView extends StatelessWidget {
                 child: BtnPrimaryInk(
                   text: 'Nueva persona',
                   onTap: () {
+                    personProvider.initVariables();
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -134,8 +136,11 @@ Widget _seeker(BuildContext context, PersonProvider personProvider) {
             label: "Nombres y/o apellidos",
             textEditingController: personProvider.searchFullName,
             // inputFormats: [
-            //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            //   FilteringTextInputFormatter.allow(
+            //     RegExp(r'[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]'),
+            //   ),
             // ],
+            onChanged: (p0) => personProvider.getAllPerson(),
             // maxLength: personProvider.typeDocument.value == 0 ? 8 : null,
           ),
         ),
@@ -143,29 +148,72 @@ Widget _seeker(BuildContext context, PersonProvider personProvider) {
           child: InputPrimary(
             label: "Nro documento",
             textEditingController: personProvider.searchDni,
-            // inputFormats: [
-            //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-            // ],
+            maxLength: 8,
+            inputFormats: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+            onChanged: (p0) => personProvider.getAllPerson(),
             // maxLength: personProvider.typeDocument.value == 0 ? 8 : null,
           ),
         ),
         Expanded(
           child: InputPrimary(
-            label: "Nro documento",
-            textEditingController: personProvider.searchBySpecialty,
+            label: "Email",
+            textEditingController: personProvider.searchMainEmail,
             // inputFormats: [
-            //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            //   FilteringTextInputFormatter.allow(
+            //     RegExp(r'[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]'),
+            //   ),
             // ],
+            onChanged: (p0) => personProvider.getAllPerson(),
             // maxLength: personProvider.typeDocument.value == 0 ? 8 : null,
+          ),
+        ),
+
+        // Expanded(
+        //   child: Container(
+        //     color: Colors.amber,
+        //     child: InputPrimary(
+        //       label: "idpersona",
+        //       textEditingController: personProvider.searchBySpecialty,
+        //       onChanged: (p0) => personProvider.getAllPerson(),
+        //     ),
+        //   ),
+        // ),
+
+        // Expanded(
+        //   child: InputPrimary(
+        //     label: "idpersona",
+        //     textEditingController: personProvider.personIdToCreate,
+        //     onChanged: (p0) => personProvider.getAllPerson(),
+        //   ),
+        // ),
+        Expanded(
+          child: InputPrimary(
+            label: "id especialidad",
+            textEditingController: personProvider.specialityIdtoCreate,
+            onChanged: (p0) => personProvider.getAllPerson(),
           ),
         ),
         SizedBox(
           width: 150.0,
           child: BtnSecondary(
             text: 'Limpiar',
-            onTap: () => personProvider.cleanSearch(),
+            onTap: () {
+              personProvider.cleanSearch();
+              // personProvider.createPersonSpeciality();
+            },
           ),
         ),
+
+        // SizedBox(
+        //   width: 150.0,
+        //   child: BtnSecondary(
+        //     text: 'Verificar',
+        //     onTap: () {
+        //       // personProvider.cleanSearch(),
+        //       personProvider.pruebaBuscarEspecialidadPerson();
+        //     }
+        //   ),
+        // ),
       ],
     ),
   );

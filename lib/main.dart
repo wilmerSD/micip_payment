@@ -1,5 +1,6 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/providers/bill_provider.dart';
+import 'package:cip_payment_web/app/providers/infodevice_provider.dart';
 import 'package:cip_payment_web/app/providers/reciept_provider.dart';
 import 'package:cip_payment_web/app/ui/views/advancepayment/advancepayment_provider.dart';
 import 'package:cip_payment_web/app/ui/views/certificateskill/certificateskill_provider.dart';
@@ -9,6 +10,7 @@ import 'package:cip_payment_web/app/ui/views/login/login_provider.dart';
 import 'package:cip_payment_web/app/ui/views/manteiners/person/person_provider.dart';
 import 'package:cip_payment_web/app/ui/views/monthlyfees/monthlyfees_provider.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
+import 'package:cip_payment_web/app/ui/views/proofnodebt/proofnodebt_provider.dart';
 import 'package:cip_payment_web/app/ui/views/recoverpass/recoverpass_provider.dart';
 import 'package:cip_payment_web/app/ui/views/splash/splash_provider.dart';
 import 'package:cip_payment_web/core/config/theme_app.dart';
@@ -34,7 +36,6 @@ void main() async {
   await PreferencesUser.init();
   await initializeDateFormatting("ES", null);
   // await dotenv.load(fileName: '.env');
-  
 
   // final authProvider = AuthProvider();
   // await authProvider.loadPerson();
@@ -56,10 +57,11 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RecoverPassProvider()),
         ChangeNotifierProvider(create: (_) => IepiProvider()),
         ChangeNotifierProvider(create: (_) => AdvancepaymentProvider()),
-        
+        ChangeNotifierProvider(create: (_) => InfodeviceProvider()),
         ChangeNotifierProvider(create: (_) => RecieptProvider()),
         ChangeNotifierProvider(create: (_) => BillProvider()),
         ChangeNotifierProvider(create: (_) => PersonProvider()),
+        ChangeNotifierProvider(create: (_) => ProofnodebtProvider()),
         ChangeNotifierProvider(
             create: (_) =>
                 ThemeProvider(darkMode: PreferencesUser().themeBool)),

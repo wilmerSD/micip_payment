@@ -1,10 +1,7 @@
 import 'package:cip_payment_web/app/providers/auth_provider.dart';
 import 'package:cip_payment_web/app/ui/components/button/btn_primary_ink.dart';
-import 'package:cip_payment_web/app/ui/components/fields/display_text.dart';
 import 'package:cip_payment_web/app/ui/components/fields/read_only_field.dart';
 import 'package:cip_payment_web/app/ui/views/myprofile/myprofile_provider.dart';
-import 'package:cip_payment_web/app/ui/views/myprofile/widgets/custom_tittle_appbar.dart';
-import 'package:cip_payment_web/app/ui/views/recoverpass/widgets/leading.dart';
 import 'package:cip_payment_web/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -5,4 +5,5 @@ abstract class InvoiceDatasource {
   Future<List<Company>> getRucs(String personId);
   Future<Company?> createRuc(CompanyModel newCompany);
   Future<Company?> updateRuc(CompanyModel companyUpdate);
+  Future<Company?> deleteRuc(String companyId);
 }

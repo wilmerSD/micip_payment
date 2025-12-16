@@ -21,4 +21,9 @@ class InvoiceRepositoryImpl extends InvoiceRepository {
   Future<Company?> updateRuc(CompanyModel companyUpdate) {
     return datasource.updateRuc(companyUpdate);
   }
+  
+  @override
+  Future<Company?> deleteRuc(String companyId) {
+    return datasource.deleteRuc(companyId);
+  }
 }

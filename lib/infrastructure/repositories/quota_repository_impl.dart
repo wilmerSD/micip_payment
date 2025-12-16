@@ -43,11 +43,17 @@ class QuotaRepositoryImpl extends QuotaRepository {
   }
 
   @override
-  Future<List<Quota>> historyPaymentQuotas(String personId) {
-    return datasource.historyPaymentQuotas(personId);
-  }
-  @override
   Future<List<Quota>> updateQuotas(List<QuotaModel> quotasToPay) {
     return datasource.updateQuotas(quotasToPay);
+  }
+
+  @override
+  Future<Quota?> fetchLastQuotaByPerson(String personId) {
+    return datasource.fetchLastQuotaByPerson(personId);
+  }
+
+  @override
+  Future<List<Quota>?> createQuotasByPerson(List<QuotaModel> quotas) {
+    return datasource.createQuotasByPerson(quotas);
   }
 }
