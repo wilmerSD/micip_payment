@@ -11,7 +11,6 @@ export 'package:cip_payment_web/app/ui/views/myprofile/myprofile_view.dart';
 export 'package:cip_payment_web/app/ui/views/proofnodebt/proofnodebt_view.dart';
 export 'package:cip_payment_web/app/ui/views/recoverpass/recoverpass_view.dart';
 export 'package:cip_payment_web/app/ui/views/splash/splash_view.dart';
-
 export 'package:cip_payment_web/app/ui/views/iepi/detail_course.dart';
 export 'package:cip_payment_web/app/ui/views/layout/layout_view.dart';
 export 'package:cip_payment_web/app/ui/views/manteiners/courses/course_view.dart';
@@ -25,6 +24,5 @@ export 'package:cip_payment_web/app/ui/views/myprofile/widgets/reset_pass.dart';
 export 'package:cip_payment_web/app/ui/views/recoverpass/widgets/recover_pass_code.dart';
 export 'package:cip_payment_web/app/ui/views/recoverpass/widgets/recover_pass_email.dart';
 export 'package:cip_payment_web/app/ui/views/recoverpass/widgets/recover_pass_reset.dart';
-
 export 'package:cip_payment_web/app/ui/components/payment/payment_bad.dart';
 export 'package:cip_payment_web/app/ui/components/payment/payment_good.dart';
