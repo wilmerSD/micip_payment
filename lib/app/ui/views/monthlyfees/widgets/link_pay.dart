@@ -29,7 +29,7 @@ class CulqiWeb {
       }).toJS,
     );
 
-    openCulqiCheckout(publicKey, amount, currency, email);
+    openCulqiCheckout('pk_test_sKWDD6bVub17VOqt'/* publicKey */, amount, currency, email);
 
     return completer.future;
   }

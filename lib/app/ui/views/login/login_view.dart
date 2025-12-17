@@ -46,7 +46,7 @@ class LoginView extends StatelessWidget {
                         // Spacer(),
                         button(context),
                         const SizedBox(height: 10.0),
-                        Center(child: forgotPassword(context)),
+                        // Center(child: forgotPassword(context)),
                       ],
                     ),
                   ),

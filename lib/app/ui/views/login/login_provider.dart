@@ -23,12 +23,12 @@ class LoginProvider with ChangeNotifier {
   User user = User();
   int counter = 0;
   TextEditingController ctrlUserName = TextEditingController(
-    text: 'usuario280@gmail.com'//'wilmer',
+    text: ''//'wilmer',
   ); //  Jose wilmer123
   //usuario280@gmail.com
   //msU9H7CBeXefsQ7aGSef
   TextEditingController ctrlPassword = TextEditingController(
-    text: 'msU9H7CBeXefsQ7aGSef'// 'wilmer',
+    text: ''// 'wilmer',
   ); // Jose123 wilmer123
   TextEditingController ctrlDni = TextEditingController(text: '12345678');
   TextEditingController ctrlName = TextEditingController(
